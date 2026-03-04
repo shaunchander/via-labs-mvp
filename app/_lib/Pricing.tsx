@@ -19,9 +19,6 @@ export function Pricing() {
           <h2 className="font-['Roundo_Variable',sans-serif] font-medium text-[30px] lg:text-[48px] tracking-[-0.225px] lg:tracking-[-0.576px] leading-[36px] lg:leading-[48px] mb-4">
             Our Transparent Pricing
           </h2>
-          <p className="font-['Geist_Mono',monospace] text-[16px] tracking-[-1.28px] leading-[28px] text-slate-400">
-            One subscription, endless possibilities
-          </p>
         </div>
 
         <div className="bg-white text-slate-900 rounded-3xl p-8 lg:p-12 border border-slate-200">

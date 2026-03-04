@@ -36,7 +36,7 @@ export function FAQ() {
             Frequently Asked Questions
           </h2>
           <p className="font-['Geist_Mono',monospace] text-[16px] tracking-[-1.28px] leading-[28px] text-slate-600">
-            Everything you need to know about Via Labs
+            Everything you need to know about Via Labs.
           </p>
         </div>
 
