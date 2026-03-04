@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
@@ -305,20 +305,14 @@ function ContactStep({
           className={inputCls}
           placeholder="M5V 2H1"
           value={answers.postal ?? ""}
-          onChange={(e) =>
-            setField("postal", e.target.value.toUpperCase())
-          }
+          onChange={(e) => setField("postal", e.target.value.toUpperCase())}
         />
       </div>
     </div>
   );
 }
 
-function SummaryStep({
-  answers,
-}: {
-  answers: Partial<QuestionnaireAnswers>;
-}) {
+function SummaryStep({ answers }: { answers: Partial<QuestionnaireAnswers> }) {
   const skinType = answers.skinType ?? "";
   const concern = answers.primaryConcern ?? "";
   const concernColor = CONCERN_COLORS[concern] ?? {
@@ -395,7 +389,7 @@ export function QuestionnaireModal() {
     (k: keyof QuestionnaireAnswers, v: string | boolean) => {
       setAnswers((prev) => ({ ...prev, [k]: v }));
     },
-    []
+    [],
   );
 
   const navigateTo = useCallback((newIndex: number) => {
@@ -440,12 +434,12 @@ export function QuestionnaireModal() {
   const continueLabel = lookupLoading
     ? "Looking up…"
     : submitting
-    ? "Submitting…"
-    : step.type === "contact"
-    ? "Submit & See Results"
-    : step.type === "summary"
-    ? "Join the Waitlist"
-    : "Continue";
+      ? "Submitting…"
+      : step.type === "contact"
+        ? "Submit & See Results"
+        : step.type === "summary"
+          ? "Join the Waitlist"
+          : "Continue";
 
   const handleContinue = async () => {
     if (step.type === "phone-lookup") {
@@ -465,9 +459,7 @@ export function QuestionnaireModal() {
 
     if (step.type === "contact") {
       setSubmitting(true);
-      await questionnaireService.submitAnswers(
-        answers as QuestionnaireAnswers
-      );
+      await questionnaireService.submitAnswers(answers as QuestionnaireAnswers);
       setSubmitting(false);
       navigateTo(stepIndex + 1); // → summary
       return;
@@ -511,7 +503,7 @@ export function QuestionnaireModal() {
             data-[state=open]:animate-in data-[state=closed]:animate-out
             data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0
             data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95
-            duration-200"
+            duration-300"
         >
           {/* ── Header ─────────────────────────────────────────────────── */}
           <div className="px-8 pt-8 pb-5 flex-shrink-0">
