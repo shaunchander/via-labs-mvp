@@ -105,7 +105,7 @@ export function SampleShowcase() {
   const card = cardContent[active];
 
   return (
-    <section className="px-6 py-24">
+    <section className="px-6 py-18">
       <div className="max-w-5xl mx-auto">
         {/* Section header */}
         <div className="text-center max-w-2xl mx-auto mb-16">

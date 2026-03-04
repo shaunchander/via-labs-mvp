@@ -8,7 +8,7 @@ import { useQuestionnaire } from "./questionnaire/QuestionnaireContext";
 export function Hero() {
   const { openQuestionnaire } = useQuestionnaire();
   return (
-    <section className="relative flex justify-center px-6 py-24">
+    <section className="relative flex justify-center px-6 py-18">
       <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16">
         <div className="space-y-8">
           {/* <div className="inline-block px-4 py-2 -translate-x-3 bg-slate-50 rounded-full">
