@@ -33,7 +33,10 @@ export function Hero() {
             full-size products with exclusive savings.
           </motion.p>
 
-          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 pt-4">
+          <motion.div
+            variants={fadeUp}
+            className="flex flex-col sm:flex-row gap-4 pt-4"
+          >
             <button
               onClick={openQuestionnaire}
               className="group bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
@@ -54,7 +57,10 @@ export function Hero() {
             </a>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="flex flex-col gap-3 pt-8 border-t border-slate-100">
+          <motion.div
+            variants={fadeUp}
+            className="flex flex-col gap-3 pt-8 border-t border-slate-300"
+          >
             <p className="font-['Geist_Mono',monospace] tracking-[-1.12px] leading-[20px] text-slate-600">
               Join our waitlist.
             </p>

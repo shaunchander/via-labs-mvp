@@ -28,11 +28,7 @@ export function Navbar() {
     >
       <div className="max-w-5xl mx-auto flex items-center justify-between">
         {/* Logo */}
-        <span
-          className={`font-['Geist_Mono',monospace] tracking-[-1.12px] leading-[20px] text-slate-900 transition-[font-size] duration-300 ${
-            scrolled ? "text-base" : "text-xl"
-          }`}
-        >
+        <span className="font-['Geist_Mono',monospace] tracking-[-1.12px] leading-[20px] text-slate-900 transition-[font-size] duration-300">
           [VIA LABS]
         </span>
 

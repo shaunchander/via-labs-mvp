@@ -22,8 +22,11 @@ export default function Page() {
             transition={{ duration: 20, ease: "linear", repeat: Infinity }}
           >
             {Array.from({ length: 8 }).map((_, i) => (
-              <span key={i} className="mx-12 text-sm font-medium tracking-wide">
-                The waitlist is now open — join today
+              <span
+                key={i}
+                className="mx-12 text-sm font-medium tracking-wide font-['Geist_Mono',monospace]"
+              >
+                Now accepting waitlist signups
               </span>
             ))}
           </motion.div>
