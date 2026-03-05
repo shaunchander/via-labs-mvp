@@ -29,7 +29,7 @@ export function FAQ() {
   ];
 
   return (
-    <section className="px-6 py-18">
+    <section id="faq" className="px-6 py-18">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="font-['Roundo_Variable',sans-serif] font-medium text-[30px] lg:text-[48px] tracking-[-0.225px] lg:tracking-[-0.576px] leading-[36px] lg:leading-[48px] text-slate-900 mb-4">

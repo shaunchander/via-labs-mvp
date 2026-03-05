@@ -13,7 +13,7 @@ export function Pricing() {
   ];
 
   return (
-    <section className="px-6 py-18 bg-slate-900 text-white">
+    <section id="pricing" className="px-6 py-18 bg-slate-900 text-white">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="font-['Roundo_Variable',sans-serif] font-medium text-[30px] lg:text-[48px] tracking-[-0.225px] lg:tracking-[-0.576px] leading-[36px] lg:leading-[48px] mb-4">

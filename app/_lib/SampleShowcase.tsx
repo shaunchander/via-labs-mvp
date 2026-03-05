@@ -39,7 +39,7 @@ const cardContent: Record<Section, CardContent> = {
     ],
     leftLabel: "What You're Actually Buying at the Drugstore",
     left: "To keep everyone happy and avoid irritation, brands use tiny amounts of active ingredients. The result? You're mostly paying for nice packaging and fragrance, not real results.",
-    rightLabel: "What Dermatologists Actually Reccommend",
+    rightLabel: "What Dermatologists Actually Recommend",
     right:
       "Via Labs samples the same clinical-grade products that you can find at a dermatologist's office. These have the ingredient concentrations that show up in research.",
     gradient: "linear-gradient(135deg, #cbd5e1 0%, #94a3b8 50%, #7c8fa3 100%)",
@@ -56,9 +56,9 @@ const cardContent: Record<Section, CardContent> = {
       { value: "7+", label: "Products tried before finding a fit" },
       { value: "$0", label: "Wasted on full-size products with no gaurantee" },
     ],
-    leftLabel: "The expensive guessing game",
+    leftLabel: "The Expensive Guessing Game",
     left: "Building a complete routine, cleanser, retinol, Vitamin C serum, eye cream, moisturizer, SPF, can easily run you over $500. And there's no guarantee any of it will work for your skin. Most people end up with a drawer full of half-used products and still no real results to show for it.",
-    rightLabel: "Try it first, then decide",
+    rightLabel: "Try it First, Then Decide",
     right:
       "Via Labs sends you samples of medical-grade products matched to your skin. Try them out before spending anything on full sizes. If something works, great, we'll get you exclusive offers. If not, you haven't thrown away $150 on a bottle that wasn't right for you. It's the smarter way to build a skincare routine.",
     gradient: "linear-gradient(135deg, #cbd5e1 0%, #94a3b8 50%, #7c8fa3 100%)",
@@ -76,9 +76,9 @@ const cardContent: Record<Section, CardContent> = {
       { value: "10+", label: "Products evaluated per category" },
       { value: "100%", label: "Derm-recommended products, in every kit" },
     ],
-    leftLabel: "Researching skincare is exhausting",
+    leftLabel: "Researching Skincare is Exhausting",
     left: "Between countless hours online, conflicting ingredient advice, and brand marketing, figuring out what products actually work together for your skin takes hours, sometimes weeks. Most people still end up guessing. And guessing gets expensive fast.",
-    rightLabel: "We've already done the work",
+    rightLabel: "We've Already Done the Work",
     right:
       "Fill out our cureated test to tell us about your skin type, concerns, and goals. Via Labs then builds your routine for you. We've evaluated hundreds of brands, mapped ingredient interactions, and matched everything to your profile using clinical research. What arrives in your box is a complete, sequenced routine, backed by science.",
     gradient: "linear-gradient(135deg, #cbd5e1 0%, #94a3b8 50%, #7c8fa3 100%)",
@@ -105,7 +105,7 @@ export function SampleShowcase() {
   const card = cardContent[active];
 
   return (
-    <section className="px-6 py-18">
+    <section id="mission" className="px-6 py-18">
       <div className="max-w-5xl mx-auto">
         {/* Section header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -179,7 +179,7 @@ export function SampleShowcase() {
           <div className="grid md:grid-cols-2 gap-4">
             <div className="bg-white/50 rounded-2xl p-6 backdrop-blur-sm">
               <p
-                className={`capitalize font-['Roundo_Variable',sans-serif] font-medium text-[17px] tracking-[-0.4px] leading-snug mb-3 ${card.accentText}`}
+                className={`font-['Roundo_Variable',sans-serif] font-medium text-[17px] tracking-[-0.4px] leading-snug mb-3 ${card.accentText}`}
               >
                 {card.leftLabel}
               </p>
@@ -189,7 +189,7 @@ export function SampleShowcase() {
             </div>
             <div className="bg-white/70 rounded-2xl p-6 backdrop-blur-sm">
               <p
-                className={`capitalize font-['Roundo_Variable',sans-serif] font-medium text-[17px] tracking-[-0.4px] leading-snug mb-3 ${card.accentText}`}
+                className={`font-['Roundo_Variable',sans-serif] font-medium text-[17px] tracking-[-0.4px] leading-snug mb-3 ${card.accentText}`}
               >
                 {card.rightLabel}
               </p>
