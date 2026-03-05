@@ -6,7 +6,7 @@ import { motion } from "motion/react";
 import { fadeUp, stagger, viewportOnce } from "./animations";
 
 export function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const faqs = [
     {

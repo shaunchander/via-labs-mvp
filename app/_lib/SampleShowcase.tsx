@@ -44,11 +44,11 @@ const cardContent: Record<Section, CardContent> = {
     rightLabel: "What Dermatologists Actually Recommend",
     right:
       "Via Labs samples the same clinical-grade products that you can find at a dermatologist's office. These have the ingredient concentrations that show up in research.",
-    gradient: "linear-gradient(135deg, #cbd5e1 0%, #94a3b8 50%, #7c8fa3 100%)",
+    gradient: "linear-gradient(135deg, #EBE6DC 0%, #D5CCBF 55%, #C4B9AB 100%)",
     accentText: "text-slate-900",
     statText: "text-slate-900",
-    tagBg: "bg-slate-700",
-    tagText: "text-slate-100",
+    tagBg: "bg-stone-800",
+    tagText: "text-stone-100",
   },
   "Affordable Access": {
     eyebrow: "Stop Wasting Money",
@@ -63,11 +63,11 @@ const cardContent: Record<Section, CardContent> = {
     rightLabel: "Try it First, Then Decide",
     right:
       "Via Labs sends you samples of medical-grade products matched to your skin. Try them out before spending anything on full sizes. If something works, great, we'll get you exclusive offers. If not, you haven't thrown away $150 on a bottle that wasn't right for you. It's the smarter way to build a skincare routine.",
-    gradient: "linear-gradient(135deg, #cbd5e1 0%, #94a3b8 50%, #7c8fa3 100%)",
+    gradient: "linear-gradient(135deg, #EBE6DC 0%, #D5CCBF 55%, #C4B9AB 100%)",
     accentText: "text-slate-900",
     statText: "text-slate-900",
-    tagBg: "bg-slate-700",
-    tagText: "text-slate-100",
+    tagBg: "bg-stone-800",
+    tagText: "text-stone-100",
   },
   "Curated Kits": {
     eyebrow: "Built For Your Skin",
@@ -83,11 +83,11 @@ const cardContent: Record<Section, CardContent> = {
     rightLabel: "We've Already Done the Work",
     right:
       "Fill out our cureated test to tell us about your skin type, concerns, and goals. Via Labs then builds your routine for you. We've evaluated hundreds of brands, mapped ingredient interactions, and matched everything to your profile using clinical research. What arrives in your box is a complete, sequenced routine, backed by science.",
-    gradient: "linear-gradient(135deg, #cbd5e1 0%, #94a3b8 50%, #7c8fa3 100%)",
+    gradient: "linear-gradient(135deg, #EBE6DC 0%, #D5CCBF 55%, #C4B9AB 100%)",
     accentText: "text-slate-900",
     statText: "text-slate-900",
-    tagBg: "bg-slate-700",
-    tagText: "text-slate-100",
+    tagBg: "bg-stone-800",
+    tagText: "text-stone-100",
   },
 };
 

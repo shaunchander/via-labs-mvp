@@ -14,7 +14,7 @@ import { Footer } from "./_lib/Footer";
 export default function Page() {
   return (
     <QuestionnaireProvider>
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-white">
         <div className="bg-black text-white py-2.5 overflow-hidden">
           <motion.div
             className="flex whitespace-nowrap"
@@ -33,6 +33,33 @@ export default function Page() {
         </div>
         <Navbar />
         <Hero />
+
+        {/* Trust signals strip */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.9, duration: 0.6 }}
+          className="border-y border-slate-100 bg-white py-4"
+        >
+          <div className="max-w-5xl mx-auto px-6 flex flex-wrap justify-center items-center gap-x-8 gap-y-2">
+            {[
+              "Dermatologist-curated",
+              "Medical-grade formulas",
+              "Try before you buy",
+              "Free shipping across Canada",
+            ].map((item, i, arr) => (
+              <span key={item} className="flex items-center gap-8">
+                <span className="font-['Geist_Mono',monospace] text-[11px] tracking-[1px] uppercase text-slate-400">
+                  {item}
+                </span>
+                {i < arr.length - 1 && (
+                  <span className="text-slate-200 hidden sm:block select-none">·</span>
+                )}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+
         <HowItWorks />
         <SampleShowcase />
         <Pricing />

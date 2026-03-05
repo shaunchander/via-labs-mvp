@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuestionnaire } from "./questionnaire/QuestionnaireContext";
 
 const navLinks = [
@@ -22,8 +22,10 @@ export function Navbar() {
 
   return (
     <nav
-      className={`sticky top-0 z-50 bg-white px-6 py-4 transition-shadow duration-300 ${
-        scrolled ? "shadow-sm" : ""
+      className={`sticky top-0 z-50 px-6 py-4 transition-all duration-300 border-b ${
+        scrolled
+          ? "bg-white/95 backdrop-blur-md border-slate-200/70 shadow-none"
+          : "bg-white border-slate-100"
       }`}
     >
       <div className="max-w-5xl mx-auto flex items-center justify-between">
