@@ -4,6 +4,7 @@ import { Check } from "lucide-react";
 import { motion } from "motion/react";
 import { useQuestionnaire } from "./questionnaire/QuestionnaireContext";
 import { fadeUp, scaleUp, stagger, viewportOnce } from "./animations";
+import ShinyText from "./ShinyText";
 
 export function Pricing() {
   const { openQuestionnaire } = useQuestionnaire();
@@ -38,7 +39,6 @@ export function Pricing() {
         >
           {/* Two-panel card */}
           <div className="grid lg:grid-cols-[1fr_1.1fr]">
-
             {/* Left — value story */}
             <div className="bg-[#F8F6F2] p-8 lg:p-10 flex flex-col justify-between gap-8">
               <div>
@@ -61,7 +61,8 @@ export function Pricing() {
                   Over $200 in samples
                 </p>
                 <p className="font-['Geist_Mono',monospace] text-[12px] tracking-[-0.3px] leading-[20px] text-stone-500">
-                  Medical-grade products curated for your exact skin type and concerns — at a fraction of the retail cost.
+                  Medical-grade products curated for your exact skin type and
+                  concerns — at a fraction of the retail cost.
                 </p>
               </div>
             </div>
@@ -101,16 +102,19 @@ export function Pricing() {
                   onClick={openQuestionnaire}
                   className="w-full bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-xl transition-all duration-200 mb-3"
                 >
-                  <span className="font-['Geist_Mono',monospace] text-[14px] tracking-[-0.4px]">
-                    Start Your Journey →
-                  </span>
+                  <ShinyText
+                    text="Start Your Journey →"
+                    speed={1.5}
+                    color="#94a3b8"
+                    shineColor="#ffffff"
+                    className="font-['Geist_Mono',monospace] text-[14px] tracking-[-0.4px]"
+                  />
                 </button>
                 <p className="font-['Geist_Mono',monospace] text-[11px] tracking-[-0.2px] text-slate-400 text-center">
                   No subscription. No commitment. Just your kit.
                 </p>
               </div>
             </div>
-
           </div>
         </motion.div>
       </div>

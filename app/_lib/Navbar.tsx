@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useQuestionnaire } from "./questionnaire/QuestionnaireContext";
+import ShinyText from "./ShinyText";
 
 const navLinks = [
   { label: "How It Works", href: "#how-it-works" },
@@ -50,9 +51,15 @@ export function Navbar() {
         {/* CTA */}
         <button
           onClick={openQuestionnaire}
-          className="font-['Geist_Mono',monospace] text-[13px] tracking-[-0.3px] bg-slate-900 text-white px-5 py-2 rounded-full hover:bg-slate-700 transition-colors duration-200"
+          className="bg-slate-900 hover:bg-slate-700 px-5 py-2 rounded-full transition-colors duration-200"
         >
-          Get Your Kit
+          <ShinyText
+            text="Get Your Kit"
+            speed={1.5}
+            color="#cbd5e1"
+            shineColor="#ffffff"
+            className="font-['Geist_Mono',monospace] text-[13px] tracking-[-0.3px]"
+          />
         </button>
       </div>
     </nav>

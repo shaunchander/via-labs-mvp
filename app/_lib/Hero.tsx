@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { useQuestionnaire } from "./questionnaire/QuestionnaireContext";
 import { fadeUp, fadeIn, stagger } from "./animations";
 import CountUp from "./CountUp";
+import ShinyText from "./ShinyText";
 
 export function Hero() {
   const { openQuestionnaire } = useQuestionnaire();
@@ -62,9 +63,13 @@ export function Hero() {
               onClick={openQuestionnaire}
               className="group bg-slate-900 hover:bg-slate-800 text-white px-7 py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
             >
-              <span className="font-['Geist_Mono',monospace] text-[14px] tracking-[-0.4px]">
-                Start Your Journey
-              </span>
+              <ShinyText
+                text="Start Your Journey"
+                speed={1.5}
+                color="#cbd5e1"
+                shineColor="#ffffff"
+                className="font-['Geist_Mono',monospace] text-[14px] tracking-[-0.4px]"
+              />
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
             <a
