@@ -1,8 +1,49 @@
 "use client";
 
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "motion/react";
 import { fadeUp, stagger, viewportOnce } from "./animations";
+
+const CircularGallery = dynamic(
+  () => import("../../components/CircularGallery"),
+  { ssr: false },
+);
+
+const brandItems = [
+  {
+    image: "https://picsum.photos/seed/skinc/700/400?grayscale",
+    text: "SkinCeuticals",
+  },
+  {
+    image: "https://picsum.photos/seed/obagi/700/400?grayscale",
+    text: "Obagi",
+  },
+  {
+    image: "https://picsum.photos/seed/elta/700/400?grayscale",
+    text: "EltaMD",
+  },
+  {
+    image: "https://picsum.photos/seed/laroche/700/400?grayscale",
+    text: "La Roche-Posay",
+  },
+  {
+    image: "https://picsum.photos/seed/pcaskin/700/400?grayscale",
+    text: "PCA Skin",
+  },
+  {
+    image: "https://picsum.photos/seed/revision/700/400?grayscale",
+    text: "Revision",
+  },
+  {
+    image: "https://picsum.photos/seed/alastin/700/400?grayscale",
+    text: "Alastin",
+  },
+  {
+    image: "https://picsum.photos/seed/isclin/700/400?grayscale",
+    text: "iS Clinical",
+  },
+];
 
 type Section = "Medical-Grade" | "Affordable Access" | "Curated Kits";
 
@@ -107,9 +148,9 @@ export function SampleShowcase() {
   const card = cardContent[active];
 
   return (
-    <section id="mission" className="px-6 py-18">
-      <div className="max-w-5xl mx-auto">
-        {/* Section header */}
+    <section id="mission" className="py-18">
+      {/* Section header */}
+      <div className="px-6 max-w-5xl mx-auto">
         <motion.div
           className="text-center max-w-2xl mx-auto mb-16"
           variants={stagger(0.1)}
@@ -131,7 +172,27 @@ export function SampleShowcase() {
             everyone.
           </motion.p>
         </motion.div>
+      </div>
 
+      {/* Brand partners gallery — full viewport width */}
+      <div className="mb-14 w-full">
+        <p className="font-['Geist_Mono',monospace] text-[11px] tracking-[1.5px] uppercase text-slate-400 text-center mb-6">
+          Partner Brands
+        </p>
+        <div className="h-[200px] sm:h-[260px] lg:h-[320px] w-full">
+          <CircularGallery
+            items={brandItems}
+            bend={3}
+            textColor="#94a3b8"
+            borderRadius={0.05}
+            font="bold 22px monospace"
+            scrollSpeed={0.1}
+            scrollEase={0.05}
+          />
+        </div>
+      </div>
+
+      <div className="px-6 max-w-5xl mx-auto">
         {/* 3-section pill group */}
         <motion.div
           className="flex justify-center gap-3 mb-10"
@@ -162,69 +223,69 @@ export function SampleShowcase() {
           whileInView="show"
           viewport={viewportOnce}
         >
-        <div
-          className={`rounded-3xl p-10 lg:p-14 border border-white/80 shadow-sm transition-opacity duration-150 ${
-            visible ? "opacity-100" : "opacity-0"
-          }`}
-          style={{ background: card.gradient }}
-        >
-          {/* Eyebrow */}
-          <span
-            className={`inline-block font-['Geist_Mono',monospace] text-[11px] tracking-[2px] uppercase px-3 py-1 rounded-full mb-6 ${card.tagBg} ${card.tagText}`}
+          <div
+            className={`rounded-3xl p-10 lg:p-14 border border-white/80 shadow-sm transition-opacity duration-150 ${
+              visible ? "opacity-100" : "opacity-0"
+            }`}
+            style={{ background: card.gradient }}
           >
-            {card.eyebrow}
-          </span>
+            {/* Eyebrow */}
+            <span
+              className={`inline-block font-['Geist_Mono',monospace] text-[11px] tracking-[2px] uppercase px-3 py-1 rounded-full mb-6 ${card.tagBg} ${card.tagText}`}
+            >
+              {card.eyebrow}
+            </span>
 
-          {/* Headline — Roundo, large */}
-          <h3
-            className={`font-['Roundo_Variable',sans-serif] font-medium text-[38px] lg:text-[56px] tracking-[-1.5px] leading-[1.05] mb-12 whitespace-pre-line ${card.accentText}`}
-          >
-            {card.headline}
-          </h3>
+            {/* Headline — Roundo, large */}
+            <h3
+              className={`font-['Roundo_Variable',sans-serif] font-medium text-[38px] lg:text-[56px] tracking-[-1.5px] leading-[1.05] mb-12 whitespace-pre-line ${card.accentText}`}
+            >
+              {card.headline}
+            </h3>
 
-          {/* Stats row */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-            {card.stats.map((stat) => (
-              <div
-                key={stat.label}
-                className="bg-white/60 rounded-2xl p-5 backdrop-blur-sm"
-              >
+            {/* Stats row */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+              {card.stats.map((stat) => (
                 <div
-                  className={`font-['Roundo_Variable',sans-serif] font-semibold text-[34px] tracking-[-1.5px] leading-none mb-2 ${card.statText}`}
+                  key={stat.label}
+                  className="bg-white/60 rounded-2xl p-5 backdrop-blur-sm"
                 >
-                  {stat.value}
+                  <div
+                    className={`font-['Roundo_Variable',sans-serif] font-semibold text-[34px] tracking-[-1.5px] leading-none mb-2 ${card.statText}`}
+                  >
+                    {stat.value}
+                  </div>
+                  <div className="font-['Geist_Mono',monospace] text-[11px] tracking-[0.2px] text-slate-500 uppercase leading-snug">
+                    {stat.label}
+                  </div>
                 </div>
-                <div className="font-['Geist_Mono',monospace] text-[11px] tracking-[0.2px] text-slate-500 uppercase leading-snug">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          {/* Two-panel body */}
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="bg-white/50 rounded-2xl p-6 backdrop-blur-sm">
-              <p
-                className={`font-['Roundo_Variable',sans-serif] font-medium text-[17px] tracking-[-0.4px] leading-snug mb-3 ${card.accentText}`}
-              >
-                {card.leftLabel}
-              </p>
-              <p className="font-['Geist_Mono',monospace] text-[13px] leading-[22px] tracking-[-0.3px] text-slate-600">
-                {card.left}
-              </p>
-            </div>
-            <div className="bg-white/70 rounded-2xl p-6 backdrop-blur-sm">
-              <p
-                className={`font-['Roundo_Variable',sans-serif] font-medium text-[17px] tracking-[-0.4px] leading-snug mb-3 ${card.accentText}`}
-              >
-                {card.rightLabel}
-              </p>
-              <p className="font-['Geist_Mono',monospace] text-[13px] leading-[22px] tracking-[-0.3px] text-slate-600">
-                {card.right}
-              </p>
+            {/* Two-panel body */}
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-white/50 rounded-2xl p-6 backdrop-blur-sm">
+                <p
+                  className={`font-['Roundo_Variable',sans-serif] font-medium text-[17px] tracking-[-0.4px] leading-snug mb-3 ${card.accentText}`}
+                >
+                  {card.leftLabel}
+                </p>
+                <p className="font-['Geist_Mono',monospace] text-[13px] leading-[22px] tracking-[-0.3px] text-slate-600">
+                  {card.left}
+                </p>
+              </div>
+              <div className="bg-white/70 rounded-2xl p-6 backdrop-blur-sm">
+                <p
+                  className={`font-['Roundo_Variable',sans-serif] font-medium text-[17px] tracking-[-0.4px] leading-snug mb-3 ${card.accentText}`}
+                >
+                  {card.rightLabel}
+                </p>
+                <p className="font-['Geist_Mono',monospace] text-[13px] leading-[22px] tracking-[-0.3px] text-slate-600">
+                  {card.right}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
         </motion.div>
       </div>
     </section>
