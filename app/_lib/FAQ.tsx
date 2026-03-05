@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import { motion } from "motion/react";
+import { fadeUp, stagger, viewportOnce } from "./animations";
 
 export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -31,19 +33,38 @@ export function FAQ() {
   return (
     <section id="faq" className="px-6 py-18">
       <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="font-['Roundo_Variable',sans-serif] font-medium text-[30px] lg:text-[48px] tracking-[-0.225px] lg:tracking-[-0.576px] leading-[36px] lg:leading-[48px] text-slate-900 mb-4">
+        <motion.div
+          className="text-center mb-16"
+          variants={stagger(0.1)}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+        >
+          <motion.h2
+            variants={fadeUp}
+            className="font-['Roundo_Variable',sans-serif] font-medium text-[30px] lg:text-[48px] tracking-[-0.225px] lg:tracking-[-0.576px] leading-[36px] lg:leading-[48px] text-slate-900 mb-4"
+          >
             Frequently Asked Questions
-          </h2>
-          <p className="font-['Geist_Mono',monospace] text-[16px] tracking-[-1.28px] leading-[28px] text-slate-600">
+          </motion.h2>
+          <motion.p
+            variants={fadeUp}
+            className="font-['Geist_Mono',monospace] text-[16px] tracking-[-1.28px] leading-[28px] text-slate-600"
+          >
             Everything you need to know about Via Labs.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        <div className="space-y-4">
+        <motion.div
+          className="space-y-4"
+          variants={stagger(0.08)}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+        >
           {faqs.map((faq, index) => (
-            <div
+            <motion.div
               key={index}
+              variants={fadeUp}
               className="border border-slate-200 rounded-xl overflow-hidden bg-white hover:border-slate-300 transition-all duration-200"
             >
               <button
@@ -67,9 +88,9 @@ export function FAQ() {
                   </p>
                 </div>
               )}
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

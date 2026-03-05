@@ -1,32 +1,39 @@
 "use client";
 
 import React from "react";
+import { motion } from "motion/react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { ArrowRight } from "lucide-react";
 import { useQuestionnaire } from "./questionnaire/QuestionnaireContext";
+import { fadeUp, fadeIn, stagger } from "./animations";
 
 export function Hero() {
   const { openQuestionnaire } = useQuestionnaire();
   return (
     <section className="relative flex justify-center px-6 py-18">
       <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16">
-        <div className="space-y-8">
-          {/* <div className="inline-block px-4 py-2 -translate-x-3 bg-slate-50 rounded-full">
-            <p className="font-['Geist_Mono',monospace] text-[14px] tracking-[-1.12px] leading-[20px] text-slate-600">
-              Via Labs is launching a waitlist
-            </p>
-          </div> */}
-
-          <h1 className="font-['Roundo_Variable',sans-serif] font-medium text-[48px] lg:text-[64px] tracking-[-0.576px] leading-[48px] lg:leading-[64px] text-slate-900">
+        <motion.div
+          className="space-y-8"
+          variants={stagger(0.1)}
+          initial="hidden"
+          animate="show"
+        >
+          <motion.h1
+            variants={fadeUp}
+            className="font-['Roundo_Variable',sans-serif] font-medium text-[48px] lg:text-[64px] tracking-[-0.576px] leading-[48px] lg:leading-[64px] text-slate-900"
+          >
             A medical-grade skincare routine that knows you.
-          </h1>
+          </motion.h1>
 
-          <p className="font-['Geist_Mono',monospace] text-[20px] tracking-[-1.6px] leading-[28px] text-slate-600 max-w-lg">
+          <motion.p
+            variants={fadeUp}
+            className="font-['Geist_Mono',monospace] text-[20px] tracking-[-1.6px] leading-[28px] text-slate-600 max-w-lg"
+          >
             Recieve curated skincare samples monthly. Try before you commit to
             full-size products with exclusive savings.
-          </p>
+          </motion.p>
 
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
+          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 pt-4">
             <button
               onClick={openQuestionnaire}
               className="group bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
@@ -45,9 +52,9 @@ export function Hero() {
                 How It Works
               </span>
             </a>
-          </div>
+          </motion.div>
 
-          <div className="flex flex-col gap-3 pt-8 border-t border-slate-100">
+          <motion.div variants={fadeUp} className="flex flex-col gap-3 pt-8 border-t border-slate-100">
             <p className="font-['Geist_Mono',monospace] tracking-[-1.12px] leading-[20px] text-slate-600">
               Join our waitlist.
             </p>
@@ -60,17 +67,23 @@ export function Hero() {
                 Members ready to start their skincare journey.
               </p>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        <div className="relative aspect-square lg:aspect-auto lg:h-[600px] rounded-2xl overflow-hidden">
+        <motion.div
+          variants={fadeIn}
+          initial="hidden"
+          animate="show"
+          transition={{ delay: 0.2 }}
+          className="relative aspect-square lg:aspect-auto lg:h-[600px] rounded-2xl overflow-hidden"
+        >
           <ImageWithFallback
             src="https://images.unsplash.com/photo-1765726951362-df46f5a74cdf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZWRpY2FsJTIwc2tpbmNhcmUlMjBzZXJ1bSUyMGJvdHRsZSUyMG1pbmltYWx8ZW58MXx8fHwxNzcyNDE4NTk1fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
             alt="Medical-grade skincare products"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/10 to-transparent" />
-        </div>
+        </motion.div>
       </div>
     </section>
   );

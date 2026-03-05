@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "motion/react";
+import { fadeUp, stagger, viewportOnce } from "./animations";
 
 type Section = "Medical-Grade" | "Affordable Access" | "Curated Kits";
 
@@ -108,18 +110,36 @@ export function SampleShowcase() {
     <section id="mission" className="px-6 py-18">
       <div className="max-w-5xl mx-auto">
         {/* Section header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="font-['Roundo_Variable',sans-serif] font-medium text-[30px] lg:text-[48px] tracking-[-0.225px] lg:tracking-[-0.576px] leading-[36px] lg:leading-[48px] text-slate-900 mb-4">
+        <motion.div
+          className="text-center max-w-2xl mx-auto mb-16"
+          variants={stagger(0.1)}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+        >
+          <motion.h2
+            variants={fadeUp}
+            className="font-['Roundo_Variable',sans-serif] font-medium text-[30px] lg:text-[48px] tracking-[-0.225px] lg:tracking-[-0.576px] leading-[36px] lg:leading-[48px] text-slate-900 mb-4"
+          >
             Everyone Should Feel Confident in Their Skin
-          </h2>
-          <p className="font-['Geist_Mono',monospace] text-[14px] tracking-[-0.5px] leading-[24px] text-slate-500">
+          </motion.h2>
+          <motion.p
+            variants={fadeUp}
+            className="font-['Geist_Mono',monospace] text-[14px] tracking-[-0.5px] leading-[24px] text-slate-500"
+          >
             We're on a mission to make medical-grade skincare accessible
             everyone.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
         {/* 3-section pill group */}
-        <div className="flex justify-center gap-3 mb-10">
+        <motion.div
+          className="flex justify-center gap-3 mb-10"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+        >
           {sections.map((section) => (
             <button
               key={section}
@@ -133,9 +153,15 @@ export function SampleShowcase() {
               {section}
             </button>
           ))}
-        </div>
+        </motion.div>
 
         {/* Content card */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+        >
         <div
           className={`rounded-3xl p-10 lg:p-14 border border-white/80 shadow-sm transition-opacity duration-150 ${
             visible ? "opacity-100" : "opacity-0"
@@ -199,6 +225,7 @@ export function SampleShowcase() {
             </div>
           </div>
         </div>
+        </motion.div>
       </div>
     </section>
   );

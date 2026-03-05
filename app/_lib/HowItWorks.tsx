@@ -1,4 +1,6 @@
 import { Package, Sparkles, RotateCcw } from "lucide-react";
+import { motion } from "motion/react";
+import { fadeUp, stagger, viewportOnce } from "./animations";
 
 export function HowItWorks() {
   const steps = [
@@ -25,19 +27,38 @@ export function HowItWorks() {
   return (
     <section id="how-it-works" className="px-6 py-18 bg-slate-50">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="font-['Roundo_Variable',sans-serif] font-medium text-[30px] lg:text-[48px] tracking-[-0.225px] lg:tracking-[-0.576px] leading-[36px] lg:leading-[48px] text-slate-900 mb-4">
+        <motion.div
+          className="text-center max-w-2xl mx-auto mb-16"
+          variants={stagger(0.1)}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+        >
+          <motion.h2
+            variants={fadeUp}
+            className="font-['Roundo_Variable',sans-serif] font-medium text-[30px] lg:text-[48px] tracking-[-0.225px] lg:tracking-[-0.576px] leading-[36px] lg:leading-[48px] text-slate-900 mb-4"
+          >
             How It Works
-          </h2>
-          <p className="font-['Geist_Mono',monospace] text-[16px] tracking-[-1.28px] leading-[28px] text-slate-600">
+          </motion.h2>
+          <motion.p
+            variants={fadeUp}
+            className="font-['Geist_Mono',monospace] text-[16px] tracking-[-1.28px] leading-[28px] text-slate-600"
+          >
             Our process to transform your skincare routine.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <motion.div
+          className="grid md:grid-cols-3 gap-8"
+          variants={stagger(0.12)}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+        >
           {steps.map((step, index) => (
-            <div
+            <motion.div
               key={index}
+              variants={fadeUp}
               className="relative bg-white rounded-2xl p-8 border border-slate-200 hover:border-slate-300 transition-all duration-200"
             >
               <div className="absolute -top-4 left-8 bg-slate-900 text-white rounded-full w-8 h-8 flex items-center justify-center">
@@ -59,9 +80,9 @@ export function HowItWorks() {
               <p className="font-['Geist_Mono',monospace] text-[16px] tracking-[-1.28px] leading-[28px] text-slate-600">
                 {step.description}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

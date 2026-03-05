@@ -1,7 +1,9 @@
 "use client";
 
 import { Check } from "lucide-react";
+import { motion } from "motion/react";
 import { useQuestionnaire } from "./questionnaire/QuestionnaireContext";
+import { fadeUp, scaleUp, stagger, viewportOnce } from "./animations";
 
 export function Pricing() {
   const { openQuestionnaire } = useQuestionnaire();
@@ -15,13 +17,25 @@ export function Pricing() {
   return (
     <section id="pricing" className="px-6 py-18 bg-slate-900 text-white">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+        >
           <h2 className="font-['Roundo_Variable',sans-serif] font-medium text-[30px] lg:text-[48px] tracking-[-0.225px] lg:tracking-[-0.576px] leading-[36px] lg:leading-[48px] mb-4">
             Our Transparent Pricing
           </h2>
-        </div>
+        </motion.div>
 
-        <div className="bg-white text-slate-900 rounded-3xl p-8 lg:p-12 border border-slate-200">
+        <motion.div
+          variants={scaleUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="bg-white text-slate-900 rounded-3xl p-8 lg:p-12 border border-slate-200"
+        >
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8 pb-8 border-b border-slate-200">
             <div>
               <h3 className="font-['Roundo_Variable',sans-serif] font-medium text-[30px] tracking-[-0.225px] leading-[36px]">
@@ -61,7 +75,7 @@ export function Pricing() {
               Start Your Journey
             </span>
           </button>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
