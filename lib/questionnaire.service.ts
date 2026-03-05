@@ -1,4 +1,5 @@
 import { PERSONAS } from "./personas";
+import { submitSignup } from "@/app/actions/submit-signup";
 
 export interface QuestionnaireAnswers {
   firstName: string;
@@ -31,13 +32,12 @@ export interface QuestionnaireService {
   ): Promise<Partial<QuestionnaireAnswers> | null>;
 }
 
-// Stub implementation — replace with real API client later
 export const questionnaireService: QuestionnaireService = {
   submitAnswers: async (answers) => {
-    console.log("[stub] submit", answers);
+    await submitSignup(answers);
   },
-  saveProgress: async (answers) => {
-    console.log("[stub] persist", answers);
+  saveProgress: async (_answers) => {
+    // No-op for now — could write partial rows later
   },
   lookupByPhone: async (phone) => {
     const normalised = phone.replace(/\D/g, "");
