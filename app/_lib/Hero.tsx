@@ -1,122 +1,174 @@
 "use client";
 
-import { motion } from "motion/react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { ArrowRight } from "lucide-react";
-import { useQuestionnaire } from "./questionnaire/QuestionnaireContext";
-import { fadeUp, fadeIn, stagger } from "./animations";
-import CountUp from "./CountUp";
+import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
 import ShinyText from "./ShinyText";
+import CountUp from "./CountUp";
 
-export function Hero() {
-  const { openQuestionnaire } = useQuestionnaire();
+type Stage = 0 | 1 | 2 | 3;
+
+export default function Hero() {
+  const [stage, setStage] = useState<Stage>(0);
+  const [phone, setPhone] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+
+  const opacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.35], [1, 0.95]);
+
+  useEffect(() => {
+    const timers = [
+      setTimeout(() => setStage(1), 1000),
+      setTimeout(() => setStage(2), 2500),
+      setTimeout(() => setStage(3), 4500),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!phone.trim()) return;
+    console.log("[via] waitlist signup:", phone);
+    setSubmitted(true);
+  }
 
   return (
-    <section className="relative overflow-hidden bg-[#F8F6F2]">
-      {/* Grain texture */}
-      <div className="noise-overlay" aria-hidden="true" />
-
-      {/* Full-bleed image — desktop only, flush right */}
+    <motion.section
+      ref={heroRef}
+      className="relative h-screen w-full bg-black flex items-center justify-center overflow-hidden"
+      style={{ opacity, scale }}
+    >
+      {/* Video background — fades in at stage 2 */}
       <motion.div
-        variants={fadeIn}
-        initial="hidden"
-        animate="show"
-        className="hidden lg:block absolute right-0 top-0 bottom-0 w-[48%]"
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: stage >= 2 ? 1 : 0 }}
+        transition={{ duration: 2.5, ease: "easeInOut" }}
       >
-        <ImageWithFallback
-          src="https://images.unsplash.com/photo-1765726951362-df46f5a74cdf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZWRpY2FsJTIwc2tpbmNhcmUlMjBzZXJ1bSUyMGJvdHRsZSUyMG1pbmltYWx8ZW58MXx8fHwxNzcyNDE4NTk1fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-          alt="Medical-grade skincare products"
-          className="w-full h-full object-cover"
+        {/* Add a video src here — e.g. a Mixkit or Pexels free video URL */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover mix-blend-overlay opacity-50"
+          src=""
         />
-        {/* Blend left edge into hero background */}
-        <div className="absolute inset-y-0 left-0 w-48 bg-linear-to-r from-[#F8F6F2] to-transparent pointer-events-none" />
+        {/* Fallback gradient — always visible */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_40%,#1c1c2e_0%,#000000_75%)]" />
       </motion.div>
 
-      {/* Text content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 xl:px-16">
+      {/* Noise grain */}
+      <div className="noise-overlay z-10" />
+
+      {/* Content */}
+      <div className="relative z-20 flex flex-col items-center text-center px-6 max-w-2xl w-full">
+        {/* Stage 1 — "Meet Via" rotates/slides up from below */}
         <motion.div
-          className="lg:min-h-[88vh] flex flex-col justify-center py-20 lg:py-0 max-w-[580px] space-y-8"
-          variants={stagger(0.1)}
-          initial="hidden"
-          animate="show"
+          initial={{ opacity: 0, y: 64, rotateX: -15 }}
+          animate={{
+            opacity: stage >= 1 ? 1 : 0,
+            y: stage >= 1 ? 0 : 64,
+            rotateX: stage >= 1 ? 0 : -15,
+          }}
+          transition={{ duration: 1.0, ease: [0.25, 0.4, 0.25, 1] }}
+          style={{ perspective: "1200px" }}
         >
-          <motion.h1
-            variants={fadeUp}
-            className="font-['Roundo_Variable',sans-serif] font-medium text-[52px] lg:text-[76px] leading-none tracking-[-0.03em] text-slate-900"
-          >
-            A medical-grade skincare routine that knows you.
-          </motion.h1>
+          <h1 className="text-[clamp(5rem,14vw,11rem)] font-['Roundo',sans-serif] font-light leading-[0.9] tracking-tight">
+            <span className="text-white/90">Meet </span>
+            <span className="text-transparent bg-clip-text bg-linear-to-br from-slate-200 via-slate-300 to-slate-500">
+              Via
+            </span>
+          </h1>
+        </motion.div>
 
-          <motion.p
-            variants={fadeUp}
-            className="font-['Geist_Mono',monospace] text-[15px] tracking-[-0.4px] leading-[26px] text-slate-500 max-w-md"
-          >
-            Recieve curated skincare samples monthly. Try before you commit to
-            full-size products with exclusive savings.
-          </motion.p>
+        {/* Stage 3 — subheadline, stats, CTA */}
+        <motion.div
+          className="mt-10 flex flex-col items-center gap-5 w-full"
+          initial={{ opacity: 0, y: 28 }}
+          animate={{
+            opacity: stage >= 3 ? 1 : 0,
+            y: stage >= 3 ? 0 : 28,
+          }}
+          transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
+        >
+          <p className="text-white/55 text-base max-w-sm font-['Geist_Mono',monospace] leading-relaxed">
+            AI-powered skin analysis. Expert guidance.
+            <br />A routine that&apos;s actually yours.
+          </p>
 
-          <motion.div
-            variants={fadeUp}
-            className="flex flex-col sm:flex-row gap-3"
-          >
-            <button
-              onClick={openQuestionnaire}
-              className="group bg-slate-900 hover:bg-slate-800 text-white px-7 py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
+          {/* Social proof */}
+          <div className="flex items-center gap-1.5 text-white/35 font-['Geist_Mono',monospace] text-xs">
+            <CountUp to={500} duration={2} startWhen={stage >= 3} />
+            <span>+ early members on the waitlist</span>
+          </div>
+
+          {/* Phone input */}
+          {!submitted ? (
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col sm:flex-row gap-3 w-full max-w-md"
             >
-              <ShinyText
-                text="Start Your Journey"
-                speed={1.5}
-                color="#cbd5e1"
-                shineColor="#ffffff"
-                className="font-['Geist_Mono',monospace] text-[14px] tracking-[-0.4px]"
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Enter your phone number"
+                className="flex-1 rounded-full px-6 py-3.5 bg-white/5 border border-white/10 text-white placeholder:text-white/25 focus:outline-none focus:border-white/25 font-['Geist_Mono',monospace] text-sm"
               />
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <a
-              href="#how-it-works"
-              className="border border-slate-200 hover:border-slate-300 bg-white/60 backdrop-blur-sm text-slate-700 px-7 py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center"
+              <button
+                type="submit"
+                className="rounded-full px-7 py-3.5 bg-white text-black font-medium text-sm hover:bg-white/90 transition-colors shrink-0"
+              >
+                <ShinyText
+                  text="Join Waitlist"
+                  color="#111111"
+                  shineColor="#555555"
+                  speed={3}
+                />
+              </button>
+            </form>
+          ) : (
+            <motion.p
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-white/75 font-['Geist_Mono',monospace] text-sm"
             >
-              <span className="font-['Geist_Mono',monospace] text-[14px] tracking-[-0.4px]">
-                How It Works
-              </span>
-            </a>
-          </motion.div>
+              You&apos;re on the list 🎉
+            </motion.p>
+          )}
 
-          <motion.div
-            variants={fadeUp}
-            className="pt-6 border-t border-slate-200/80"
-          >
-            <p className="font-['Geist_Mono',monospace] text-[11px] tracking-[1px] uppercase text-slate-400 mb-3">
-              Waitlist members
-            </p>
-            <div className="flex items-baseline gap-0.5">
-              <span className="font-['Roundo_Variable',sans-serif] font-medium text-[46px] tracking-[-0.04em] leading-none text-slate-900">
-                <CountUp to={500} separator="," duration={1} />
-              </span>
-              <span className="font-['Roundo_Variable',sans-serif] font-medium text-[46px] tracking-[-0.04em] leading-none text-slate-900">
-                +
-              </span>
-            </div>
-            <p className="font-['Geist_Mono',monospace] text-[11px] tracking-[-0.3px] text-slate-400 mt-1.5">
-              Members ready to start their skincare journey.
-            </p>
-          </motion.div>
+          <p className="text-white/25 text-xs font-['Geist_Mono',monospace]">
+            No spam. Just your launch notification.
+          </p>
         </motion.div>
       </div>
 
-      {/* Mobile image — below text on small screens */}
+      {/* Scroll indicator */}
       <motion.div
-        variants={fadeIn}
-        initial="hidden"
-        animate="show"
-        className="lg:hidden relative h-72 overflow-hidden"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: stage >= 3 ? 0.6 : 0 }}
+        transition={{ delay: 0.8, duration: 0.6 }}
       >
-        <ImageWithFallback
-          src="https://images.unsplash.com/photo-1765726951362-df46f5a74cdf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZWRpY2FsJTIwc2tpbmNhcmUlMjBzZXJ1bSUyMGJvdHRsZSUyMG1pbmltYWx8ZW58MXx8fHwxNzcyNDE4NTk1fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-          alt="Medical-grade skincare products"
-          className="w-full h-full object-cover"
-        />
+        <div className="w-px h-8 bg-linear-to-b from-transparent to-white/30" />
+        <motion.div
+          className="w-4 h-7 rounded-full border border-white/20 flex items-start justify-center pt-1.5"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2.5, repeat: Infinity }}
+        >
+          <motion.div
+            className="w-0.5 h-1.5 bg-white/50 rounded-full"
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity }}
+          />
+        </motion.div>
       </motion.div>
-    </section>
+    </motion.section>
   );
 }
