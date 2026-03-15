@@ -81,7 +81,7 @@ export default function ForewordSection() {
           <div className="flex flex-col gap-4 w-fit">
             <div className="relative w-28 h-28 overflow-hidden rounded-xl">
               <Image
-                src="/samavia.jpeg"
+                src="/samavia.png"
                 alt="Samavia Ahmad"
                 fill
                 className="object-cover grayscale"
