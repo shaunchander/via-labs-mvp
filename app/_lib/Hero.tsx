@@ -72,9 +72,10 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  // Parallax: content drifts up, section fades out on scroll
-  const contentY = useTransform(scrollYProgress, [0, 0.4], ["0%", "-6%"]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.38], [1, 0]);
+  // Parallax: content drifts up slowly, section stays fully visible until
+  // the user has scrolled 50% of the hero height, then fades to black.
+  const contentY = useTransform(scrollYProgress, [0.5, 0.85], ["0%", "-6%"]);
+  const heroOpacity = useTransform(scrollYProgress, [0.5, 0.82], [1, 0]);
 
   // Orchestrated entrance: lock scroll, stage through on timers
   useEffect(() => {
