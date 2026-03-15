@@ -6,7 +6,7 @@ import FastMarquee from "react-fast-marquee";
 const ITEMS = [
   "Waitlist Now Open",
   "Know Your Skin",
-  "AI-Powered Analysis",
+  "Promote Skin Longevity",
   "Join 500+ Early Members",
 ];
 
@@ -23,7 +23,7 @@ export default function Marquee() {
       transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1], delay: 4.5 }}
     >
       <div className="h-9 flex items-center">
-        <FastMarquee speed={35} gradient={false}>
+        <FastMarquee speed={35} gradient={false} autoFill gradientColor="black">
           {ITEMS.map((item, i) => (
             <span
               key={i}

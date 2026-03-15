@@ -1,12 +1,65 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
-import { ScanFace, Sparkles, ShieldCheck } from "lucide-react";
-import ShinyText from "./ShinyText";
-import CountUp from "./CountUp";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useScroll,
+  useTransform,
+} from "motion/react";
+import { Sparkles } from "lucide-react";
+import { PhoneInput } from "./PhoneInput";
+import { phoneSchema } from "@/lib/phone";
+
+// ─── Magnetic CTA button ─────────────────────────────────────────────────────
+
+function MagneticButton({
+  children,
+  type = "button",
+  className,
+}: {
+  children: React.ReactNode;
+  type?: "button" | "submit";
+  className?: string;
+}) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const sx = useSpring(mx, { stiffness: 150, damping: 15 });
+  const sy = useSpring(my, { stiffness: 150, damping: 15 });
+
+  function onMove(e: React.MouseEvent) {
+    const rect = ref.current!.getBoundingClientRect();
+    mx.set((e.clientX - rect.left - rect.width / 2) * 0.35);
+    my.set((e.clientY - rect.top - rect.height / 2) * 0.35);
+  }
+
+  return (
+    <motion.button
+      ref={ref}
+      type={type}
+      style={{ x: sx, y: sy }}
+      onMouseMove={onMove}
+      onMouseLeave={() => {
+        mx.set(0);
+        my.set(0);
+      }}
+      className={className}
+    >
+      {children}
+    </motion.button>
+  );
+}
+
+// ─── Hero ────────────────────────────────────────────────────────────────────
 
 type Stage = 0 | 1 | 2 | 3;
+
+const H1_WORDS = [
+  { word: "Meet", delay: 0, accent: false },
+  { word: "Via.", delay: 0.18, accent: true },
+];
 
 export default function Hero() {
   const [stage, setStage] = useState<Stage>(0);
@@ -19,16 +72,17 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.35], [1, 0.95]);
+  // Parallax: content drifts up, section fades out on scroll
+  const contentY = useTransform(scrollYProgress, [0, 0.4], ["0%", "-6%"]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.38], [1, 0]);
 
-  // Lock scroll during intro, unlock when content is ready
+  // Orchestrated entrance: lock scroll, stage through on timers
   useEffect(() => {
     document.body.style.overflow = "hidden";
     const timers = [
-      setTimeout(() => setStage(1), 1000),
-      setTimeout(() => setStage(2), 2500),
-      setTimeout(() => setStage(3), 4500),
+      setTimeout(() => setStage(1), 500), // H1 starts
+      setTimeout(() => setStage(2), 1500), // background + eyebrow
+      setTimeout(() => setStage(3), 2900), // subhead, proof, CTA
     ];
     return () => {
       timers.forEach(clearTimeout);
@@ -40,235 +94,194 @@ export default function Hero() {
     if (stage >= 3) document.body.style.overflow = "";
   }, [stage]);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!phone.trim()) return;
-    console.log("[via] waitlist signup:", phone);
+    if (!phoneSchema.safeParse(phone).success) return;
+    fetch("/api/waitlist-phone", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone }),
+    }).catch(() => null);
     setSubmitted(true);
   }
 
   return (
     <motion.section
       ref={heroRef}
-      className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-black"
-      style={{ opacity, scale }}
+      className="relative flex h-svh w-full items-center justify-center overflow-hidden bg-black"
+      style={{ opacity: heroOpacity }}
     >
+      {/* ── Ambient background ────────────────────────────────────────────── */}
       <motion.div
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-0 pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: stage >= 2 ? 1 : 0 }}
-        transition={{ duration: 2.5, ease: "easeInOut" }}
+        transition={{ duration: 2.6, ease: "easeInOut" }}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#2d3f38_0%,#111412_34%,#050505_72%)]" />
+        {/* Deep green radial — skin health, nature */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_50%_at_50%_-5%,#1b2e24_0%,#050707_65%)]" />
+
+        {/* Orb: top-left, soft sage */}
         <motion.div
-          className="absolute left-[-12%] top-[12%] h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(circle,rgba(201,255,225,0.16),rgba(201,255,225,0))] blur-3xl"
-          animate={{ x: [0, 18, -8, 0], y: [0, -12, 10, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -left-[12%] top-[8%] h-128 w-128 rounded-full bg-[radial-gradient(circle,rgba(134,239,172,0.09),transparent_68%)] blur-3xl"
+          animate={{ x: [0, 24, -12, 0], y: [0, -18, 14, 0] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
         />
+
+        {/* Orb: bottom-right, warm amber */}
         <motion.div
-          className="absolute bottom-[-10%] right-[-6%] h-[24rem] w-[24rem] rounded-full bg-[radial-gradient(circle,rgba(255,214,170,0.14),rgba(255,214,170,0))] blur-3xl"
-          animate={{ x: [0, -18, 10, 0], y: [0, 10, -14, 0] }}
-          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -bottom-[14%] -right-[8%] h-112 w-112 rounded-full bg-[radial-gradient(circle,rgba(251,191,114,0.08),transparent_68%)] blur-3xl"
+          animate={{ x: [0, -22, 16, 0], y: [0, 16, -20, 0] }}
+          transition={{ duration: 19, repeat: Infinity, ease: "easeInOut" }}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),transparent_18%,transparent_82%,rgba(255,255,255,0.08))]" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.88))]" />
+
+        {/* Edge vignette */}
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.35)_0%,transparent_20%,transparent_78%,rgba(0,0,0,0.9)_100%)]" />
       </motion.div>
 
+      {/* Grain */}
       <div className="noise-overlay z-10" />
 
-      <div className="relative z-20 flex w-full max-w-6xl flex-col items-center px-6 py-24 text-center">
+      {/* ── Content ─────────────────────────────────────────────────────── */}
+      <motion.div
+        className="relative z-20 flex w-full max-w-2xl flex-col items-center px-6 text-center"
+        style={{ y: contentY }}
+      >
+        {/* Eyebrow badge */}
         <motion.div
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-4 py-2 text-[10px] uppercase tracking-[0.24em] text-white/55 backdrop-blur-md"
-          initial={{ opacity: 0, y: 12 }}
+          className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-[10px] uppercase tracking-[0.24em] text-white/48 backdrop-blur-md"
+          initial={{ opacity: 0, y: 10 }}
           animate={stage >= 2 ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.55, ease: [0.25, 0.4, 0.25, 1] }}
         >
-          <Sparkles className="h-3.5 w-3.5 text-emerald-200/80" />
-          AI skin analysis for real routines
+          <Sparkles className="h-3 w-3 text-emerald-300/55" />
+          In development · Gauging interest
         </motion.div>
 
-        <h1
-          className="text-[clamp(5rem,14vw,11rem)] font-['Roundo',sans-serif] font-light leading-[0.9] tracking-tight flex gap-[0.25em]"
-          style={{ perspective: "800px", perspectiveOrigin: "50% 100%" }}
-        >
-          <motion.span
-            className="inline-block text-white/90"
-            style={{ transformOrigin: "50% 100%" }}
-            initial={{ rotateX: 74, opacity: 0, y: "0.4em" }}
-            animate={stage >= 1 ? { rotateX: 0, opacity: 1, y: "0em" } : {}}
-            transition={{ duration: 0.9, ease: [0.25, 0.4, 0.25, 1] }}
-          >
-            Meet
-          </motion.span>
-          <motion.span
-            className="inline-block text-transparent bg-clip-text bg-linear-to-br from-slate-200 via-slate-300 to-slate-500"
-            style={{ transformOrigin: "50% 100%" }}
-            initial={{ rotateX: 74, opacity: 0, y: "0.4em" }}
-            animate={stage >= 1 ? { rotateX: 0, opacity: 1, y: "0em" } : {}}
-            transition={{ duration: 0.9, ease: [0.25, 0.4, 0.25, 1], delay: 0.18 }}
-          >
-            Via
-          </motion.span>
-        </h1>
-
-        <motion.div
-          className="mt-8 flex w-full flex-col items-center gap-5"
-          initial={{ opacity: 0, y: 28 }}
-          animate={{
-            opacity: stage >= 3 ? 1 : 0,
-            y: stage >= 3 ? 0 : 28,
-          }}
-          transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
-        >
-          <p className="max-w-xl text-balance font-['Geist_Mono',monospace] text-sm leading-relaxed text-white/60 md:text-base">
-            Scan your face, grade the products you already own, and get a routine
-            that adjusts with weekly progress instead of guesswork.
-          </p>
-
-          <div className="grid w-full max-w-3xl gap-3 md:grid-cols-[1.2fr_0.8fr]">
-            <div className="rounded-[1.75rem] border border-white/12 bg-white/[0.05] p-5 text-left backdrop-blur-md">
-              <div className="mb-5 flex items-center justify-between">
-                <p className="font-['Geist_Mono',monospace] text-[10px] uppercase tracking-[0.24em] text-white/35">
-                  Weekly skin signal
-                </p>
-                <div className="rounded-full border border-emerald-300/20 bg-emerald-300/10 px-2.5 py-1 font-['Geist_Mono',monospace] text-[10px] text-emerald-100/80">
-                  Improving
-                </div>
-              </div>
-              <div className="flex items-end justify-between gap-6">
-                <div className="flex flex-col">
-                  <p className="font-['Geist_Mono',monospace] text-[9px] uppercase tracking-[0.2em] text-white/30">
-                    Skin Age
-                  </p>
-                  <p className="mt-1 text-5xl leading-none text-white font-['Roundo',sans-serif] font-light">
-                    24.3
-                  </p>
-                  <p className="mt-2 font-['Geist_Mono',monospace] text-[10px] text-emerald-300/75">
-                    ↓ 0.7 in the last 7 days
-                  </p>
-                </div>
-                <div className="min-w-28 border-l border-white/10 pl-5">
-                  {["Barrier", "Tone", "Breakouts"].map((label, i) => (
-                    <div key={label} className="mb-2 last:mb-0">
-                      <div className="mb-1 flex items-center justify-between font-['Geist_Mono',monospace] text-[9px] uppercase tracking-[0.18em] text-white/28">
-                        <span>{label}</span>
-                        <span>{["92", "84", "78"][i]}</span>
-                      </div>
-                      <div className="h-1 rounded-full bg-white/8">
-                        <div
-                          className="h-full rounded-full bg-[linear-gradient(90deg,rgba(167,243,208,0.65),rgba(254,240,138,0.65))]"
-                          style={{ width: `${[92, 84, 78][i]}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="grid gap-3">
-              {[
-                {
-                  icon: ScanFace,
-                  title: "Face scans",
-                  copy: "Track visible changes with weekly check-ins.",
-                },
-                {
-                  icon: ShieldCheck,
-                  title: "Product grading",
-                  copy: "See what to keep, replace, or stop buying.",
-                },
-              ].map(({ icon: Icon, title, copy }) => (
-                <div
-                  key={title}
-                  className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-4 text-left backdrop-blur-md"
-                >
-                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05]">
-                    <Icon className="h-4 w-4 text-white/60" />
-                  </div>
-                  <p className="mb-1 font-['Roundo',sans-serif] text-lg font-light text-white">
-                    {title}
-                  </p>
-                  <p className="font-['Geist_Mono',monospace] text-xs leading-relaxed text-white/45">
-                    {copy}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-2 font-['Geist_Mono',monospace] text-[10px] uppercase tracking-[0.2em] text-white/38">
-            {["Scan", "Grade", "Consult", "Adjust"].map((item) => (
-              <span
-                key={item}
-                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5"
+        {/* H1 — word-by-word blur + rotateX reveal */}
+        <div style={{ perspective: "900px", perspectiveOrigin: "50% 100%" }}>
+          <h1 className="font-['Roundo',sans-serif] font-light leading-[0.88] tracking-tight text-[clamp(4rem,13vw,9.5rem)]">
+            {H1_WORDS.map(({ word, delay, accent }) => (
+              <motion.span
+                key={word}
+                className={`inline-block mr-[0.22em] last:mr-0 ${
+                  accent
+                    ? "text-transparent bg-clip-text bg-gradient-to-br from-slate-100 via-slate-300 to-slate-500"
+                    : "text-white/90"
+                }`}
+                style={{ transformOrigin: "50% 100%" }}
+                initial={{
+                  rotateX: 70,
+                  opacity: 0,
+                  filter: "blur(8px)",
+                  y: "0.3em",
+                }}
+                animate={
+                  stage >= 1
+                    ? { rotateX: 0, opacity: 1, filter: "blur(0px)", y: "0em" }
+                    : {}
+                }
+                transition={{
+                  duration: 1.0,
+                  ease: [0.25, 0.4, 0.25, 1],
+                  delay,
+                }}
               >
-                {item}
-              </span>
+                {word}
+              </motion.span>
             ))}
-          </div>
+          </h1>
+        </div>
 
-          <div className="flex items-center gap-1.5 text-white/35 font-['Geist_Mono',monospace] text-xs">
-            <CountUp to={500} duration={2} startWhen={stage >= 3} />
-            <span>+ early members on the waitlist</span>
-          </div>
+        {/* Rule — draws in from center after headline lands */}
+        <motion.div
+          className="mt-6 h-px w-[180px] bg-gradient-to-r from-transparent via-white/16 to-transparent"
+          initial={{ scaleX: 0 }}
+          animate={stage >= 2 ? { scaleX: 1 } : {}}
+          transition={{
+            duration: 1.2,
+            ease: [0.25, 0.4, 0.25, 1],
+            delay: 0.45,
+          }}
+        />
 
+        {/* Subhead */}
+        <motion.p
+          className="mt-5 max-w-[400px] text-balance font-['Geist_Mono',monospace] text-[13px] leading-relaxed text-white/48 md:text-[14px]"
+          initial={{ opacity: 0, y: 16 }}
+          animate={stage >= 3 ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
+        >
+          Your skin has a biological age. Most routines don&apos;t touch it. Via
+          measures it weekly, grades your products, and builds the routine that
+          actually lowers it.
+        </motion.p>
+
+        {/* CTA */}
+        <motion.div
+          className="mt-8 flex w-full flex-col items-center gap-3"
+          initial={{ opacity: 0, y: 22 }}
+          animate={stage >= 3 ? { opacity: 1, y: 0 } : {}}
+          transition={{
+            duration: 0.75,
+            ease: [0.25, 0.4, 0.25, 1],
+            delay: 0.3,
+          }}
+        >
           {!submitted ? (
             <form
               onSubmit={handleSubmit}
-              className="flex flex-col sm:flex-row gap-3 w-full max-w-md"
+              className="flex w-full max-w-md flex-col gap-2.5 sm:flex-row sm:gap-3"
             >
-              <input
-                type="tel"
+              <PhoneInput
+                variant="dark"
+                className="flex-1 min-w-0"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="Enter your phone number"
-                className="flex-1 rounded-full px-6 py-3.5 bg-white/5 border border-white/10 text-white placeholder:text-white/25 focus:outline-none focus:border-white/25 font-['Geist_Mono',monospace] text-sm"
+                onChange={setPhone}
+                placeholder="(416) 555-0142"
               />
-              <button
+              <MagneticButton
                 type="submit"
-                className="rounded-full px-7 py-3.5 bg-white text-black font-medium text-sm hover:bg-white/90 transition-colors shrink-0"
+                className="shrink-0 cursor-pointer rounded-full bg-white px-7 py-3.5 text-sm font-medium text-black transition-colors hover:bg-white/90 disabled:opacity-40"
               >
-                <ShinyText
-                  text="Join Waitlist"
-                  color="#111111"
-                  shineColor="#555555"
-                  speed={3}
-                />
-              </button>
+                Join waitlist
+              </MagneticButton>
             </form>
           ) : (
-            <motion.p
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-white/75 font-['Geist_Mono',monospace] text-sm"
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+              className="rounded-full border border-emerald-300/22 bg-emerald-300/[0.07] px-6 py-3.5 font-['Geist_Mono',monospace] text-sm text-emerald-100/75"
             >
-              You&apos;re on the list 🎉
-            </motion.p>
+              You&apos;re on the list. We&apos;ll be in touch.
+            </motion.div>
           )}
 
-          <p className="text-white/25 text-xs font-['Geist_Mono',monospace]">
-            No spam. Just your launch notification.
+          <p className="font-['Geist_Mono',monospace] text-[11px] text-white/40">
+            Sign up for free. We&apos;ll reach out when we&apos;re ready to
+            launch.
           </p>
         </motion.div>
-      </div>
+      </motion.div>
 
+      {/* ── Scroll cue ──────────────────────────────────────────────────── */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
+        className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 flex flex-col items-center gap-2"
         initial={{ opacity: 0 }}
-        animate={{ opacity: stage >= 3 ? 0.6 : 0 }}
-        transition={{ delay: 0.8, duration: 0.6 }}
+        animate={{ opacity: stage >= 3 ? 0.45 : 0 }}
+        transition={{ delay: 1.2, duration: 0.7 }}
       >
-        <div className="w-px h-8 bg-linear-to-b from-transparent to-white/30" />
+        <div className="h-8 w-px bg-gradient-to-b from-transparent to-white/24" />
         <motion.div
-          className="w-4 h-7 rounded-full border border-white/20 flex items-start justify-center pt-1.5"
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2.5, repeat: Infinity }}
+          className="flex h-7 w-4 items-start justify-center rounded-full border border-white/18 pt-1.5"
+          animate={{ opacity: [0.35, 0.85, 0.35] }}
+          transition={{ duration: 2.6, repeat: Infinity }}
         >
           <motion.div
-            className="w-0.5 h-1.5 bg-white/50 rounded-full"
+            className="h-1.5 w-0.5 rounded-full bg-white/40"
             animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2.5, repeat: Infinity }}
+            transition={{ duration: 2.6, repeat: Infinity }}
           />
         </motion.div>
       </motion.div>

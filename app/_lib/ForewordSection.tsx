@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform } from "motion/react";
 import Image from "next/image";
 
 const MISSION =
-  "We believe everyone deserves skin that gets better with time. Via gives you a routine built around your skin's actual needs, the tools to track whether it's working, and clinicians to guide you when it matters. No guesswork. No wasted products. Just skin that improves — measurably, week over week.";
+  "We believe everyone deserves skin that gets better with time. Via gives you a routine built around your skin's actual needs, the tools to track whether it's working, and weekly insights to guide you when it matters. No more guesswork or wasted products. Just skin that improves, measurably, week over week.";
 
 export default function ForewordSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -53,7 +53,7 @@ export default function ForewordSection() {
               style={{
                 clipPath: useTransform(
                   fillProgress,
-                  (latest) => `inset(0 0 ${100 - latest}% 0)`
+                  (latest) => `inset(0 0 ${100 - latest}% 0)`,
                 ),
               }}
             >
@@ -73,8 +73,8 @@ export default function ForewordSection() {
           <p className="text-black/45 font-['Geist_Mono',monospace] text-sm leading-relaxed max-w-lg mb-10">
             After caring for thousands of patients in dermatology, I kept seeing
             the same problem: people spending money on products that were never
-            right for their skin. Nobody was connecting the dots between their
-            routine, their products, and their results. I built Via to change that.
+            right for their skin. I built Via to better help people connect the
+            dots between their routine, their products, and their results.
           </p>
 
           {/* Stacked: photo → label + name → signature */}
@@ -85,6 +85,7 @@ export default function ForewordSection() {
                 alt="Samavia Ahmad"
                 fill
                 className="object-cover grayscale"
+                draggable={false}
               />
             </div>
             <div>
@@ -95,13 +96,6 @@ export default function ForewordSection() {
                 Samavia Ahmad
               </p>
             </div>
-            <Image
-              src="/signature.jpeg"
-              alt="Samavia Ahmad signature"
-              width={180}
-              height={56}
-              className="object-contain object-left"
-            />
           </div>
         </motion.div>
       </div>

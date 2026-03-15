@@ -4,15 +4,21 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import ShinyText from "./ShinyText";
 import { fadeUp, stagger, viewportOnce } from "./animations";
+import { PhoneInput } from "./PhoneInput";
+import { phoneSchema } from "@/lib/phone";
 
 export default function CTASection() {
   const [phone, setPhone] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!phone.trim()) return;
-    console.log("[via] waitlist signup:", phone);
+    if (!phoneSchema.safeParse(phone).success) return;
+    fetch("/api/waitlist-phone", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone }),
+    }).catch(() => null);
     setSubmitted(true);
   }
 
@@ -27,7 +33,7 @@ export default function CTASection() {
       >
         <motion.p
           variants={fadeUp}
-          className="text-white/35 uppercase text-[10px] tracking-[0.2em] font-['Geist_Mono',monospace]"
+          className="text-white/35 uppercase text-sm  tracking-[0.2em] font-['Geist_Mono',monospace]"
         >
           Early Access
         </motion.p>
@@ -48,13 +54,16 @@ export default function CTASection() {
 
         <motion.div variants={fadeUp} className="w-full max-w-md">
           {!submitted ? (
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="tel"
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col sm:flex-row gap-3"
+            >
+              <PhoneInput
+                variant="dark"
+                className="flex-1 min-w-0"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="Enter your phone number"
-                className="flex-1 rounded-full px-6 py-3.5 bg-white/5 border border-white/10 text-white placeholder:text-white/25 focus:outline-none focus:border-white/25 font-['Geist_Mono',monospace] text-sm"
+                onChange={setPhone}
+                placeholder="(416) 555-0142"
               />
               <button
                 type="submit"
@@ -81,7 +90,7 @@ export default function CTASection() {
 
         <motion.p
           variants={fadeUp}
-          className="text-white/25 text-xs font-['Geist_Mono',monospace]"
+          className="text-white/40 text-xs font-['Geist_Mono',monospace]"
         >
           No spam. Just your launch notification.
         </motion.p>
