@@ -1,7 +1,13 @@
 "use client";
 
 import { motion } from "motion/react";
-import { TrendingDown, CalendarDays, Package, MessageCircle } from "lucide-react";
+import {
+  TrendingDown,
+  CalendarDays,
+  Package,
+  MessageCircle,
+  ArrowUpRight,
+} from "lucide-react";
 import MagicCard from "./MagicCard";
 import { fadeUp, stagger, viewportOnce } from "./animations";
 import RoutinePlayer from "./remotion/RoutinePlayer";
@@ -131,12 +137,18 @@ export default function BentoGrid() {
             {features.map(({ icon: Icon, label, description }) => (
               <motion.div key={label} variants={fadeUp} className="h-full">
                 <MagicCard className="relative h-full min-h-[200px] overflow-hidden">
-                  {/* Remotion background — absolute, behind text */}
                   {label === "Your Routine" && <RoutinePlayer />}
-                  {/* Card text — sits above the video */}
                   <div className="relative z-10 flex flex-col gap-4 p-7">
-                    <div className="w-10 h-10 rounded-xl bg-white/4 border border-white/10 flex items-center justify-center shrink-0">
-                      <Icon size={17} className="text-white/50" />
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-white/4 border border-white/10 flex items-center justify-center shrink-0">
+                        <Icon size={17} className="text-white/50" />
+                      </div>
+                      {label === "Your Routine" && (
+                        <div className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-black/35 px-2.5 py-1 text-[9px] font-['Geist_Mono',monospace] uppercase tracking-[0.18em] text-white/45 backdrop-blur-md">
+                          Live plan
+                          <ArrowUpRight size={11} />
+                        </div>
+                      )}
                     </div>
                     <div>
                       <h3 className="text-white font-['Roundo',sans-serif] font-light text-lg mb-2 leading-snug">
@@ -146,6 +158,12 @@ export default function BentoGrid() {
                         {description}
                       </p>
                     </div>
+                    {label === "Your Routine" && (
+                      <div className="mt-auto flex items-center justify-between rounded-2xl border border-white/8 bg-black/25 px-3 py-2 font-['Geist_Mono',monospace] text-[10px] text-white/38 backdrop-blur-sm">
+                        <span>Adjusted after your March 14 scan</span>
+                        <span className="text-emerald-300/75">+ barrier support</span>
+                      </div>
+                    )}
                   </div>
                 </MagicCard>
               </motion.div>

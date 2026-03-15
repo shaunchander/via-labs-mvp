@@ -175,6 +175,57 @@ function SectionLabel({ text, opacity }: { text: string; opacity: number }) {
   );
 }
 
+function ProgressStrip({ frame }: { frame: number }) {
+  const progress = interpolate(frame, [0, 200], [0.16, 0.92], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        marginTop: "auto",
+        paddingTop: 16,
+      }}
+    >
+      <div
+        style={{
+          flex: 1,
+          height: 5,
+          borderRadius: 999,
+          background: "rgba(255,255,255,0.06)",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            width: `${progress * 100}%`,
+            height: "100%",
+            borderRadius: 999,
+            background:
+              "linear-gradient(90deg, rgba(167,243,208,0.85), rgba(253,224,71,0.85))",
+          }}
+        />
+      </div>
+      <div
+        style={{
+          color: "rgba(255,255,255,0.4)",
+          fontSize: 9,
+          fontFamily: "'Geist Mono', monospace",
+          letterSpacing: "0.12em",
+          textTransform: "uppercase",
+          flexShrink: 0,
+        }}
+      >
+        Adapting
+      </div>
+    </div>
+  );
+}
+
 export function RoutineComposition() {
   const frame = useCurrentFrame();
 
@@ -206,15 +257,21 @@ export function RoutineComposition() {
     <AbsoluteFill
       style={{
         background: "#0f0f0f",
-        padding: "22px 22px 0",
+        padding: "22px 22px 18px",
         opacity: globalIn,
       }}
     >
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(circle at top left, rgba(167,243,208,0.08), transparent 34%), radial-gradient(circle at bottom right, rgba(253,224,71,0.06), transparent 28%)",
+        }}
+      />
       <TabBar tabProgress={tabProgress} />
 
-      {/* AM and PM sections overlap — opacity drives visibility */}
       <div style={{ position: "relative", flex: 1 }}>
-        {/* AM */}
         <div style={{ position: "absolute", inset: 0, opacity: amOpacity }}>
           <SectionLabel text="Morning Routine" opacity={1} />
           {AM_STEPS.map((step, i) => (
@@ -222,7 +279,6 @@ export function RoutineComposition() {
           ))}
         </div>
 
-        {/* PM */}
         <div style={{ position: "absolute", inset: 0, opacity: pmOpacity }}>
           <SectionLabel text="Evening Routine" opacity={1} />
           {PM_STEPS.map((step, i) => (
@@ -230,6 +286,8 @@ export function RoutineComposition() {
           ))}
         </div>
       </div>
+
+      <ProgressStrip frame={frame} />
     </AbsoluteFill>
   );
 }
