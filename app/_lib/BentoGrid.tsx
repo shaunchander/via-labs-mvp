@@ -1,31 +1,89 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Scan, Layers, Video } from "lucide-react";
+import { TrendingDown, CalendarDays, Package, MessageCircle } from "lucide-react";
 import MagicCard from "./MagicCard";
 import { fadeUp, stagger, viewportOnce } from "./animations";
+import RoutinePlayer from "./remotion/RoutinePlayer";
+
+// Skin age tracker card — wide, gets its own visual treatment
+function SkinAgeCard() {
+  const weeks = [
+    { wk: "Wk 1", val: "25.4" },
+    { wk: "Wk 2", val: "25.1" },
+    { wk: "Wk 3", val: "24.8" },
+    { wk: "Wk 4", val: "24.3" },
+  ];
+
+  return (
+    <MagicCard className="p-8 min-h-[220px] flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+      <div className="flex items-start gap-5">
+        <div className="w-10 h-10 rounded-xl bg-white/4 border border-white/10 flex items-center justify-center shrink-0">
+          <TrendingDown size={17} className="text-white/50" />
+        </div>
+        <div>
+          <h3 className="text-white font-['Roundo',sans-serif] font-light text-xl mb-2 leading-snug">
+            Skin Age Tracker
+          </h3>
+          <p className="text-white/40 text-sm font-['Geist_Mono',monospace] leading-relaxed max-w-xs">
+            A weekly score that reflects your skin&apos;s biological age. Follow your
+            routine and watch the number drop. Skip it, and it climbs back.
+          </p>
+        </div>
+      </div>
+
+      {/* Stat widget */}
+      <div className="shrink-0 flex items-end gap-6 rounded-2xl border border-white/8 bg-white/[0.03] px-6 py-5">
+        <div>
+          <p className="text-white/25 font-['Geist_Mono',monospace] text-[9px] tracking-[0.2em] uppercase">
+            This week
+          </p>
+          <p className="text-white text-5xl font-['Roundo',sans-serif] font-light leading-none mt-1.5">
+            24.3
+          </p>
+          <p className="text-emerald-400/70 font-['Geist_Mono',monospace] text-[10px] mt-2">
+            ↓ 1.1 since you started
+          </p>
+        </div>
+        <div className="flex flex-col gap-1 pb-1">
+          {weeks.map(({ wk, val }, i) => (
+            <div key={i} className="flex items-center gap-2.5">
+              <span className="text-white/20 font-['Geist_Mono',monospace] text-[9px] w-8">
+                {wk}
+              </span>
+              <span
+                className={`font-['Geist_Mono',monospace] text-[10px] tabular-nums ${
+                  i === weeks.length - 1 ? "text-white/80" : "text-white/25"
+                }`}
+              >
+                {val}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </MagicCard>
+  );
+}
 
 const features = [
   {
-    icon: Scan,
-    label: "Face Scan & Skin Analysis",
+    icon: CalendarDays,
+    label: "Your Routine",
     description:
-      "AI reads your skin in seconds. Understand your unique skin profile — moisture, texture, concerns — without a dermatologist appointment.",
-    wide: true,
+      "Morning and evening routines built around your skin's actual needs. Updated as your skin improves — not a one-size-fits-all plan.",
   },
   {
-    icon: Layers,
-    label: "Product Grading",
+    icon: Package,
+    label: "Product Tracker",
     description:
-      "Ingest your current products. Get a fit score for your skin goals and targeted recommendations for what's missing.",
-    wide: false,
+      "Log what you're already using. See what's helping, what's wasting your money, and what's missing from your shelf.",
   },
   {
-    icon: Video,
-    label: "Virtual Consultations",
+    icon: MessageCircle,
+    label: "Expert Consultations",
     description:
-      "Connect with Via's skincare team for personalized routine guidance from real experts.",
-    wide: false,
+      "Book time with Via's skincare team. Real guidance from clinicians who've seen thousands of skin profiles — not a chatbot.",
   },
 ];
 
@@ -51,41 +109,48 @@ export default function BentoGrid() {
             variants={fadeUp}
             className="text-3xl md:text-5xl font-['Roundo',sans-serif] font-light text-white"
           >
-            Your skin, finally understood.
+            Skin health you can measure.
           </motion.h2>
         </motion.div>
 
         {/* Grid */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-4"
-          variants={stagger(0.1)}
+          className="flex flex-col gap-4"
+          variants={stagger(0.08)}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
         >
-          {features.map(({ icon: Icon, label, description, wide }) => (
-            <motion.div
-              key={label}
-              variants={fadeUp}
-              className={wide ? "md:col-span-2" : ""}
-            >
-              <MagicCard className="p-8 h-full min-h-[200px] flex flex-col justify-between gap-6">
-                <div className="flex items-start gap-5">
-                  <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center shrink-0">
-                    <Icon size={17} className="text-white/50" />
+          {/* Row 1 — wide skin age card */}
+          <motion.div variants={fadeUp}>
+            <SkinAgeCard />
+          </motion.div>
+
+          {/* Row 2 — 3 equal cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {features.map(({ icon: Icon, label, description }) => (
+              <motion.div key={label} variants={fadeUp} className="h-full">
+                <MagicCard className="relative h-full min-h-[200px] overflow-hidden">
+                  {/* Remotion background — absolute, behind text */}
+                  {label === "Your Routine" && <RoutinePlayer />}
+                  {/* Card text — sits above the video */}
+                  <div className="relative z-10 flex flex-col gap-4 p-7">
+                    <div className="w-10 h-10 rounded-xl bg-white/4 border border-white/10 flex items-center justify-center shrink-0">
+                      <Icon size={17} className="text-white/50" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-['Roundo',sans-serif] font-light text-lg mb-2 leading-snug">
+                        {label}
+                      </h3>
+                      <p className="text-white/40 text-sm font-['Geist_Mono',monospace] leading-relaxed">
+                        {description}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-white font-['Roundo',sans-serif] font-light text-xl mb-2 leading-snug">
-                      {label}
-                    </h3>
-                    <p className="text-white/40 text-sm font-['Geist_Mono',monospace] leading-relaxed">
-                      {description}
-                    </p>
-                  </div>
-                </div>
-              </MagicCard>
-            </motion.div>
-          ))}
+                </MagicCard>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>
