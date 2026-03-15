@@ -93,7 +93,7 @@ export default function ForewordSection() {
                 Founder · Dermatology Clinician
               </p>
               <p className="text-black font-['Roundo',sans-serif] font-light text-xl">
-                Samavia Ahmad
+                Samavia Ahmad, MSc
               </p>
             </div>
           </div>
