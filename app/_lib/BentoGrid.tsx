@@ -22,7 +22,6 @@ const BentoPlayer = dynamic(() => import("./remotion/BentoPlayer"), {
 
 // ─── Masks ───────────────────────────────────────────────────────────────────
 
-// Top-of-card preview: fades in from top edge, fades out into text below
 const TOP_MASK: CSSProperties = {
   maskImage:
     "linear-gradient(to bottom, transparent 0%, black 20%, black 62%, transparent 100%), " +
@@ -34,7 +33,6 @@ const TOP_MASK: CSSProperties = {
   WebkitMaskComposite: "source-in",
 };
 
-// Right-side preview: fades in from the left (text boundary), fades at top/bottom/right
 const RIGHT_MASK: CSSProperties = {
   maskImage:
     "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%), " +
@@ -65,13 +63,69 @@ function TopPreview({
   );
 }
 
+// ─── Shared card content block ────────────────────────────────────────────────
+// Mobile: uniform sizing across all cards.
+// md+: each card variant can layer responsive overrides via className props.
+
+function CardContent({
+  icon: Icon,
+  label,
+  description,
+  badge,
+  footer,
+  // Responsive overrides — callers pass md: classes to restore desktop sizing
+  iconClassName = "",
+  headingClassName = "",
+  bodyClassName = "",
+  wrapperClassName = "",
+}: {
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  label: string;
+  description: string;
+  badge?: React.ReactNode;
+  footer?: React.ReactNode;
+  iconClassName?: string;
+  headingClassName?: string;
+  bodyClassName?: string;
+  wrapperClassName?: string;
+}) {
+  return (
+    <div className={`flex flex-col gap-3 ${wrapperClassName}`}>
+      <div className="flex items-center justify-between gap-3">
+        {/* Icon — mobile baseline: w-8 h-8 rounded-lg size-14 */}
+        <div
+          className={`w-8 h-8 rounded-lg bg-white/4 border border-white/10 flex items-center justify-center shrink-0 ${iconClassName}`}
+        >
+          <Icon size={14} className="text-white/50" />
+        </div>
+        {badge}
+      </div>
+
+      <div>
+        {/* Heading — mobile baseline: text-[17px] */}
+        <h3
+          className={`text-white font-['Roundo',sans-serif] font-light text-[17px] mb-1.5 leading-snug ${headingClassName}`}
+        >
+          {label}
+        </h3>
+        {/* Body — mobile baseline: text-[13px] */}
+        <p
+          className={`text-white/38 text-[13px] font-['Geist_Mono',monospace] leading-relaxed ${bodyClassName}`}
+        >
+          {description}
+        </p>
+      </div>
+
+      {footer}
+    </div>
+  );
+}
+
 // ─── Cards ───────────────────────────────────────────────────────────────────
 
-// HERO — 2×2, skin age tracker
 function SkinAgeCard({ className }: { className?: string }) {
   return (
     <MagicCard className={`flex flex-col overflow-hidden ${className ?? ""}`}>
-      {/* Large preview zone — the composition content looks great at hero scale */}
       <TopPreview height={220}>
         <div
           style={{
@@ -90,30 +144,22 @@ function SkinAgeCard({ className }: { className?: string }) {
         </div>
       </TopPreview>
 
-      {/* Content — pushed to bottom */}
-      <div className="flex flex-col justify-end flex-1 p-8 pt-5">
-        <div className="flex flex-col items-start gap-4">
-          <div className="w-10 h-10 rounded-xl bg-white/4 border border-white/10 flex items-center justify-center shrink-0">
-            <TrendingDown size={17} className="text-white/50" />
-          </div>
-          <div>
-            <h3 className="text-white font-['Roundo',sans-serif] font-light text-xl mb-1.5 leading-snug">
-              Skin Age Tracker
-            </h3>
-            <p className="text-white/38 text-sm font-['Geist_Mono',monospace] leading-relaxed">
-              A weekly score based on your skin&apos;s biological age, so you
-              can see exactly how your routine is changing things.
-            </p>
-          </div>
-        </div>
+      <div className="flex flex-col justify-end flex-1 p-6 pt-4 md:p-8 md:pt-5">
+        <CardContent
+          icon={TrendingDown}
+          label="Skin Age Tracker"
+          description="A weekly score based on your skin's biological age, so you can see exactly how your routine is changing things."
+          iconClassName="md:w-10 md:h-10 md:rounded-xl"
+          headingClassName="md:text-xl"
+          bodyClassName="md:text-sm"
+        />
       </div>
     </MagicCard>
   );
 }
 
-// SMALL — 1×1, stacked: preview on top, text below
 function SmallCard({
-  icon: Icon,
+  icon,
   label,
   description,
   playerComponent,
@@ -139,51 +185,38 @@ function SmallCard({
         />
       </TopPreview>
 
-      <div className="flex flex-col gap-3 p-6 pt-4 flex-1 justify-end">
-        <div className="flex items-center justify-between gap-3">
-          <div className="w-8 h-8 rounded-lg bg-white/4 border border-white/10 flex items-center justify-center shrink-0">
-            <Icon size={14} className="text-white/50" />
-          </div>
-          {badge}
-        </div>
-        <div className="flex-1">
-          <h3 className="text-white font-['Roundo',sans-serif] font-light text-[17px] mb-1.5 leading-snug">
-            {label}
-          </h3>
-          <p className="text-white/36 text-[13px] font-['Geist_Mono',monospace] leading-relaxed">
-            {description}
-          </p>
-        </div>
-        {footer}
+      <div className="flex flex-col p-6 pt-4 flex-1 justify-end">
+        <CardContent
+          icon={icon}
+          label={label}
+          description={description}
+          badge={badge}
+          footer={footer}
+        />
       </div>
     </MagicCard>
   );
 }
 
-// WIDE — full-width horizontal: text left, animation peek on right
 function ProductTrackerCard() {
   return (
     <MagicCard className="overflow-hidden">
       <div className="flex flex-col md:flex-row md:items-stretch min-h-[190px]">
-        {/* Text — left side */}
-        <div className="flex flex-col justify-center gap-4 p-8 md:max-w-[360px]">
-          <div className="w-9 h-9 rounded-xl bg-white/4 border border-white/10 flex items-center justify-center shrink-0">
-            <Package size={15} className="text-white/50" />
-          </div>
-          <div>
-            <h3 className="text-white font-['Roundo',sans-serif] font-light text-xl mb-1.5 leading-snug">
-              Product Tracker
-            </h3>
-            <p className="text-white/38 text-sm font-['Geist_Mono',monospace] leading-relaxed">
-              Log your current products and see exactly what&apos;s working,
-              what&apos;s wasting your money, and where your routine has gaps.
-            </p>
-          </div>
+        {/* Text — bottom on mobile (order-2), left on desktop */}
+        <div className="order-2 flex flex-col justify-center p-6 md:p-8 md:max-w-[360px]">
+          <CardContent
+            icon={Package}
+            label="Product Tracker"
+            description="Log your current products and see exactly what's working, what's wasting your money, and where your routine has gaps."
+            iconClassName="md:w-9 md:h-9 md:rounded-xl"
+            headingClassName="md:text-xl"
+            bodyClassName="md:text-sm"
+          />
         </div>
 
-        {/* Animation — right side, peeks in from the right edge */}
+        {/* Animation — top on mobile (order-1), right on desktop */}
         <div
-          className="relative flex-1 overflow-hidden min-h-[220px] md:min-h-0 saturate-0 group-hover:saturate-100 transition-[filter] duration-500"
+          className="order-1 relative flex-1 overflow-hidden min-h-[220px] md:min-h-0 saturate-0 group-hover:saturate-100 transition-[filter] duration-500"
           style={RIGHT_MASK}
         >
           <div
@@ -210,11 +243,11 @@ function ProductTrackerCard() {
 
 export default function BentoGrid() {
   return (
-    <section className="bg-black px-6 py-24">
+    <section className="bg-black px-4 md:px-6 py-20 md:py-24">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <motion.div
-          className="mb-14 text-center"
+          className="mb-10 md:mb-14 text-center"
           variants={stagger(0.1)}
           initial="hidden"
           whileInView="show"
@@ -222,7 +255,7 @@ export default function BentoGrid() {
         >
           <motion.p
             variants={fadeUp}
-            className="text-white/35 uppercase text-sm  tracking-[0.2em] font-['Geist_Mono',monospace] mb-3"
+            className="text-white/35 uppercase text-xs md:text-sm tracking-[0.2em] font-['Geist_Mono',monospace] mb-3"
           >
             What Via Does
           </motion.p>
@@ -234,29 +267,19 @@ export default function BentoGrid() {
           </motion.h2>
         </motion.div>
 
-        {/*
-          Bento layout (3-col custom grid: 2fr | 3fr | 3fr):
-          ┌────────────┬──────────┬──────────┐
-          │            │ Routine  │ Expert   │
-          │  Skin Age  │          │          │
-          │  (2fr,     ├──────────┴──────────┤
-          │  row 1–2)  │  Product Tracker    │
-          │            │  (col 2–3, row 2)   │
-          └────────────┴─────────────────────┘
-        */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-[3fr_3fr_3fr] gap-4"
+          className="grid grid-cols-1 md:grid-cols-[3fr_3fr_3fr] gap-3 md:gap-4"
           variants={stagger(0.07)}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
         >
-          {/* SkinAge hero — col 1 (2fr), spans 2 rows */}
+          {/* SkinAge — col 1, spans 2 rows on desktop */}
           <motion.div variants={fadeUp} className="md:row-span-2 flex flex-col">
             <SkinAgeCard className="flex-1" />
           </motion.div>
 
-          {/* Routine — col 3, row 1 */}
+          {/* Routine */}
           <motion.div variants={fadeUp}>
             <SmallCard
               icon={CalendarDays}
@@ -267,7 +290,7 @@ export default function BentoGrid() {
             />
           </motion.div>
 
-          {/* Expert — col 4, row 1 */}
+          {/* Consultations */}
           <motion.div variants={fadeUp}>
             <SmallCard
               icon={MessageCircle}
@@ -278,7 +301,7 @@ export default function BentoGrid() {
             />
           </motion.div>
 
-          {/* Product Tracker — spans cols 3–4, row 2 */}
+          {/* Product Tracker — spans cols 2–3 on desktop */}
           <motion.div variants={fadeUp} className="md:col-span-2">
             <ProductTrackerCard />
           </motion.div>
