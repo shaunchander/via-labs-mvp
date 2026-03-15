@@ -81,16 +81,6 @@ export function ConsultationComposition() {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const globalIn = interpolate(frame, [0, 8], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-
-  const globalOut = interpolate(frame, [210, 240], [1, 0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-
   const headerProg = spring({ frame, fps, config: { damping: 200 } });
   const headerOpacity = interpolate(headerProg, [0, 1], [0, 1]);
 
@@ -106,7 +96,6 @@ export function ConsultationComposition() {
       style={{
         background: "#0f0f0f",
         padding: "22px 22px 18px",
-        opacity: globalIn * globalOut,
       }}
     >
       {/* Warm glow bottom-right */}

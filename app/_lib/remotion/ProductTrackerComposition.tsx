@@ -156,17 +156,11 @@ function GapBanner() {
   const y = interpolate(prog, [0, 1], [20, 0]);
   const opacity = interpolate(prog, [0, 1], [0, 1]);
 
-  // Fade out for loop
-  const fadeOut = interpolate(frame, [220, 240], [1, 0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-
   return (
     <div
       style={{
         marginTop: 10,
-        opacity: opacity * fadeOut,
+        opacity,
         transform: `translateY(${y}px)`,
         display: "flex",
         alignItems: "center",
@@ -219,23 +213,11 @@ function GapBanner() {
 export function ProductTrackerComposition() {
   const frame = useCurrentFrame();
 
-  const globalIn = interpolate(frame, [0, 8], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-
-  // Fade out near end for clean loop
-  const globalOut = interpolate(frame, [220, 240], [1, 0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-
   return (
     <AbsoluteFill
       style={{
         background: "#0f0f0f",
         padding: "22px 22px 18px",
-        opacity: globalIn * globalOut,
       }}
     >
       {/* Glow */}

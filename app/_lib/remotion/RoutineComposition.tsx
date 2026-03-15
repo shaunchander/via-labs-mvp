@@ -247,18 +247,11 @@ export function RoutineComposition() {
     extrapolateRight: "clamp",
   });
 
-  // Global fade in at start
-  const globalIn = interpolate(frame, [0, 10], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-
   return (
     <AbsoluteFill
       style={{
         background: "#0f0f0f",
         padding: "22px 22px 18px",
-        opacity: globalIn,
       }}
     >
       <div

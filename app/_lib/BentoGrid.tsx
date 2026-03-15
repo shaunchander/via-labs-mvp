@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useState } from "react";
 import {
   TrendingDown,
   CalendarDays,
@@ -70,14 +69,8 @@ function TopPreview({
 
 // HERO — 2×2, skin age tracker
 function SkinAgeCard({ className }: { className?: string }) {
-  const [hovered, setHovered] = useState(false);
-
   return (
-    <MagicCard
-      className={`flex flex-col overflow-hidden ${className ?? ""}`}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
+    <MagicCard className={`flex flex-col overflow-hidden ${className ?? ""}`}>
       {/* Large preview zone — the composition content looks great at hero scale */}
       <TopPreview height={220}>
         <div
@@ -91,9 +84,8 @@ function SkinAgeCard({ className }: { className?: string }) {
         >
           <BentoPlayer
             component={SkinAgeComposition}
-            durationInFrames={240}
+            durationInFrames={420}
             style={{ width: "100%", aspectRatio: "400/310" }}
-            playing={hovered}
           />
         </div>
       </TopPreview>
@@ -137,20 +129,13 @@ function SmallCard({
   badge?: React.ReactNode;
   footer?: React.ReactNode;
 }) {
-  const [hovered, setHovered] = useState(false);
-
   return (
-    <MagicCard
-      className="flex flex-col overflow-hidden"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
+    <MagicCard className="flex flex-col overflow-hidden">
       <TopPreview height={155}>
         <BentoPlayer
           component={playerComponent}
           durationInFrames={durationInFrames}
           style={{ width: "100%", aspectRatio: "400/310" }}
-          playing={hovered}
         />
       </TopPreview>
 
@@ -177,14 +162,8 @@ function SmallCard({
 
 // WIDE — full-width horizontal: text left, animation peek on right
 function ProductTrackerCard() {
-  const [hovered, setHovered] = useState(false);
-
   return (
-    <MagicCard
-      className="overflow-hidden"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
+    <MagicCard className="overflow-hidden">
       <div className="flex flex-col md:flex-row md:items-stretch min-h-[190px]">
         {/* Text — left side */}
         <div className="flex flex-col justify-center gap-4 p-8 md:max-w-[360px]">
@@ -219,7 +198,6 @@ function ProductTrackerCard() {
               component={ProductTrackerComposition}
               durationInFrames={240}
               style={{ width: "100%", aspectRatio: "400/310" }}
-              playing={hovered}
             />
           </div>
         </div>

@@ -18,14 +18,14 @@ const WEEKS = [
 
 const METRICS = ["Barrier", "Tone", "Breakouts"];
 
-// Week display windows scaled to 240 frames (was 300)
+// 420 frames total @ 30fps = 14s per loop
 const WEEK_TIMES = [
-  { in: 0, out: 48 },
-  { in: 48, out: 108 },
-  { in: 108, out: 168 },
-  { in: 168, out: 240 },
+  { in: 0,   out: 90  },
+  { in: 90,  out: 195 },
+  { in: 195, out: 310 },
+  { in: 310, out: 420 },
 ];
-const CROSS = 12; // crossfade duration in frames
+const CROSS = 20; // crossfade duration in frames
 
 function MetricBar({
   label,
@@ -121,7 +121,7 @@ function WeekSlide({
   // Badge pulses in on week 4 only
   const badgeIn =
     weekIndex === 3
-      ? spring({ frame: frame - 192, fps, config: { damping: 14 } })
+      ? spring({ frame: frame - 334, fps, config: { damping: 14 } })
       : 0;
 
   const numY = interpolate(numProg, [0, 1], [10, 0]);
@@ -223,11 +223,6 @@ function WeekSlide({
 export function SkinAgeComposition() {
   const frame = useCurrentFrame();
 
-  const globalIn = interpolate(frame, [0, 8], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-
   // Compute opacity for each week slide
   const weekOpacities = WEEK_TIMES.map(({ in: wIn, out: wOut }, i) => {
     const isLast = i === WEEK_TIMES.length - 1;
@@ -252,7 +247,6 @@ export function SkinAgeComposition() {
       style={{
         background: "#0f0f0f",
         padding: "22px 22px 18px",
-        opacity: globalIn,
       }}
     >
       {/* Glows */}
