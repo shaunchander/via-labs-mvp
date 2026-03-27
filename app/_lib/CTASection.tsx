@@ -63,7 +63,6 @@ export default function CTASection() {
                 className="flex-1 min-w-0"
                 value={phone}
                 onChange={setPhone}
-                placeholder="(416) 555-0142"
               />
               <button
                 type="submit"

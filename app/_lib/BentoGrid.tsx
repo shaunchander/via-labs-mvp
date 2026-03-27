@@ -257,13 +257,14 @@ export default function BentoGrid() {
             variants={fadeUp}
             className="text-white/35 uppercase text-xs md:text-sm tracking-[0.2em] font-['Geist_Mono',monospace] mb-3"
           >
-            What Via Does
+            A Glimpse Into Via
           </motion.p>
           <motion.h2
             variants={fadeUp}
             className="text-3xl md:text-5xl font-['Roundo',sans-serif] font-light text-white"
           >
-            Skin health you can measure.
+            Skin health you
+            <br className="md:hidden" /> can measure
           </motion.h2>
         </motion.div>
 

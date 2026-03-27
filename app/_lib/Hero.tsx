@@ -9,6 +9,8 @@ import {
   useTransform,
 } from "motion/react";
 import { Sparkles } from "lucide-react";
+import { Player } from "@remotion/player";
+import { SkinAgeComposition, RULER_DURATION } from "./SkinAgeComposition";
 import { PhoneInput } from "./PhoneInput";
 import { phoneSchema } from "@/lib/phone";
 
@@ -150,13 +152,13 @@ export default function Hero() {
       >
         {/* Eyebrow badge */}
         <motion.div
-          className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-[10px] uppercase tracking-[0.24em] text-white/48 backdrop-blur-md"
+          className="font-['Geist_Mono',monospace] mb-7 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-[10px] uppercase tracking-[0.24em] text-white/48 backdrop-blur-md"
           initial={{ opacity: 0, y: 10 }}
           animate={stage >= 2 ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.55, ease: [0.25, 0.4, 0.25, 1] }}
         >
           <Sparkles className="h-3 w-3 text-emerald-300/55" />
-          In development · Gauging interest
+          Launching soon
         </motion.div>
 
         {/* H1 — word-by-word blur + rotateX reveal */}
@@ -194,28 +196,40 @@ export default function Hero() {
           </h1>
         </div>
 
-        {/* Rule — draws in from center after headline lands */}
+        {/* Skin-age ruler */}
         <motion.div
-          className="mt-6 h-px w-[180px] bg-gradient-to-r from-transparent via-white/16 to-transparent"
-          initial={{ scaleX: 0 }}
-          animate={stage >= 2 ? { scaleX: 1 } : {}}
-          transition={{
-            duration: 1.2,
-            ease: [0.25, 0.4, 0.25, 1],
-            delay: 0.45,
+          className="mt-8 w-full max-w-[400px] pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={stage >= 3 ? { opacity: 1 } : {}}
+          transition={{ duration: 1.0, ease: [0.25, 0.4, 0.25, 1], delay: 0.1 }}
+          style={{
+            maskImage:
+              "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
           }}
-        />
+        >
+          <Player
+            component={SkinAgeComposition}
+            durationInFrames={RULER_DURATION}
+            fps={30}
+            compositionWidth={500}
+            compositionHeight={175}
+            loop
+            autoPlay
+            style={{ width: "100%", height: 175, opacity: 0.88 }}
+          />
+        </motion.div>
 
         {/* Subhead */}
+
         <motion.p
-          className="mt-5 max-w-[400px] text-balance font-['Geist_Mono',monospace] text-[13px] leading-relaxed text-white/48 md:text-[14px]"
+          className="mt-5 max-w-[400px] text-balance font-['Geist_Mono',monospace] text-lg leading-relaxed text-white/48 md:text-lg"
           initial={{ opacity: 0, y: 16 }}
           animate={stage >= 3 ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
         >
-          Your skin has a biological age. Most routines don&apos;t touch it. Via
-          measures it weekly, grades your products, and builds the routine that
-          actually lowers it.
+          Track your skin health and age backwards.
         </motion.p>
 
         {/* CTA */}
@@ -239,7 +253,6 @@ export default function Hero() {
                 className="flex-1 min-w-0"
                 value={phone}
                 onChange={setPhone}
-                placeholder="(416) 555-0142"
               />
               <MagneticButton
                 type="submit"
@@ -253,15 +266,15 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
-              className="rounded-full border border-emerald-300/22 bg-emerald-300/[0.07] px-6 py-3.5 font-['Geist_Mono',monospace] text-sm text-emerald-100/75"
+              className="rounded-full border border-emerald-300/22 bg-emerald-300/[0.07] px-6 py-3.5 font-['Geist_Mono',monospace] text-emerald-100/75"
             >
               You&apos;re on the list. We&apos;ll be in touch.
             </motion.div>
           )}
 
-          <p className="font-['Geist_Mono',monospace] text-[11px] text-white/40">
-            Sign up for free. We&apos;ll reach out when we&apos;re ready to
-            launch.
+          <p className="font-['Geist_Mono',monospace] text-xs text-white/40">
+            Sign up for early access. We&apos;ll reach out when we&apos;re ready
+            to launch.
           </p>
         </motion.div>
       </motion.div>

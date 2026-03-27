@@ -20,7 +20,7 @@ export function PhoneInput({
   onChange,
   autoFocus,
   id,
-  placeholder = "(416) 555-0142",
+  placeholder = "(226) 260-1918",
   variant = "light",
   className,
 }: PhoneInputProps) {
@@ -46,12 +46,11 @@ export function PhoneInput({
         <div
           className={cn(
             "flex items-stretch rounded-full border bg-white/[0.06] backdrop-blur-md overflow-hidden transition-colors",
-            borderCls
+            borderCls,
           )}
         >
           {/* Country prefix */}
           <div className="flex items-center gap-1.5 pl-5 pr-3.5 border-r border-white/10 shrink-0 select-none">
-            <span className="text-[14px] leading-none">🇨🇦</span>
             <span className="font-['Geist_Mono',monospace] text-[12px] text-white/38 tracking-[-0.2px]">
               +1
             </span>
@@ -105,12 +104,11 @@ export function PhoneInput({
       <div
         className={cn(
           "flex items-stretch border rounded-lg overflow-hidden bg-white transition-colors",
-          borderCls
+          borderCls,
         )}
       >
         {/* Country prefix */}
         <div className="flex items-center gap-1.5 px-3 border-r border-slate-200 bg-slate-50 shrink-0 select-none">
-          <span className="text-[15px] leading-none">🇨🇦</span>
           <span className="font-['Geist_Mono',monospace] text-[13px] text-slate-500 tracking-[-0.2px]">
             +1
           </span>
