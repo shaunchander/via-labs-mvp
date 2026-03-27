@@ -1,5 +1,11 @@
 import React from "react";
-import { interpolate, useCurrentFrame, useVideoConfig, Easing } from "remotion";
+import {
+  Img,
+  interpolate,
+  useCurrentFrame,
+  useVideoConfig,
+  Easing,
+} from "remotion";
 
 const MIN_AGE = 18;
 const MAX_AGE = 38;
@@ -7,10 +13,10 @@ const PX_PER_AGE = 26;
 
 // 4 stops fluctuating between 27 and 24 — shows skin age improving over time
 const STOPS = [
-  { age: 27.0 },
-  { age: 25.8 },
-  { age: 24.3 },
-  { age: 26.1 },
+  { age: 27.0, img: "/27.png" },
+  { age: 25.8, img: "/25.png" },
+  { age: 24.3, img: "/24_3.png" },
+  { age: 26.1, img: "/26_1.png" },
 ];
 
 const STOP_HOLD = 95; // ~3.2s hold at each stop
@@ -35,6 +41,7 @@ function getAnimState(frame: number) {
       centerAge: curr.age,
       atStop: true,
       holdProgress: fInSeg / STOP_HOLD,
+      segIdx,
     };
   }
 
@@ -44,6 +51,7 @@ function getAnimState(frame: number) {
     centerAge: curr.age + (next.age - curr.age) * eased,
     atStop: false,
     holdProgress: 0,
+    segIdx,
   };
 }
 
@@ -51,7 +59,7 @@ export const SkinAgeComposition: React.FC = () => {
   const frame = useCurrentFrame();
   const { width: W } = useVideoConfig();
 
-  const { centerAge, atStop, holdProgress } = getAnimState(frame);
+  const { centerAge, atStop, holdProgress, segIdx } = getAnimState(frame);
 
   // Popup: fade in first 16%, hold, fade out last 16%
   const popupOpacity = atStop
@@ -99,15 +107,15 @@ export const SkinAgeComposition: React.FC = () => {
           pointerEvents: "none",
         }}
       >
-        {/* Face image placeholder — swap with <Img> when assets are ready */}
-        <div
+        {/* Face image */}
+        <Img
+          src={STOPS[segIdx].img}
           style={{
             width: 52,
             height: 52,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle at 50% 36%, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 60%), " +
-              "linear-gradient(180deg, rgba(134,239,172,0.1), rgba(134,239,172,0.04))",
+            borderRadius: "20%",
+            objectFit: "cover",
+            objectPosition: "right",
             border: "1.5px solid rgba(134,239,172,0.28)",
             marginBottom: 8,
             flexShrink: 0,
