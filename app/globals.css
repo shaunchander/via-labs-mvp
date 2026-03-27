@@ -7,10 +7,6 @@
 
 /* Fonts */
 
-/* Smooth scroll */
-html {
-  scroll-behavior: smooth;
-}
 
 /* Grain / noise texture overlay */
 .noise-overlay {

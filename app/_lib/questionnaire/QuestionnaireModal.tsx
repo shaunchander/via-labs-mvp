@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X, ArrowLeft, ArrowRight, Check, Phone } from "lucide-react";
 import { useQuestionnaire } from "./QuestionnaireContext";
@@ -162,7 +162,7 @@ function PhoneLookupStep({
           />
         </div>
         <p className="mt-1.5 font-['Geist_Mono',monospace] text-[11px] tracking-[-0.2px] text-slate-400">
-          We'll use this to pull your saved details.
+          We&apos;ll use this to pull your saved details.
         </p>
       </div>
 

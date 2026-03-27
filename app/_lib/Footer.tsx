@@ -1,30 +1,48 @@
-'use client';
+"use client";
 
-export function Footer() {
+import { motion } from "motion/react";
+
+export default function Footer() {
   return (
-    <footer className="bg-slate-900 overflow-hidden">
-      {/* Copyright bar */}
-      <div className="px-8 pt-10 pb-6 flex items-center justify-center">
-        <p className="font-['Geist_Mono',monospace] text-[12px] tracking-[0.5px] text-slate-500">
-          © 2026 Via Labs Inc. All rights reserved.
-        </p>
-      </div>
+    <footer className="bg-black border-t border-white/10 px-6 py-16">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12">
+          <div>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
+              className="text-6xl md:text-8xl font-['Roundo',sans-serif] font-light text-white leading-none"
+            >
+              Via
+            </motion.p>
+            <p className="text-white/30 font-['Geist_Mono',monospace] text-xs mt-3">
+              Skin that knows you.
+            </p>
+          </div>
 
-      {/* Giant wordmark fading to bottom */}
-      <div className="relative leading-none select-none text-center px-4">
-        <p
-          className="font-['Geist_Mono',monospace] font-bold text-slate-700 whitespace-nowrap"
-          style={{ fontSize: "15.8svw", letterSpacing: "-0.04em" }}
-        >
-          [VIA LABS]
-        </p>
-        {/* Gradient fade — bottom half disappears into the background */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: "linear-gradient(to bottom, transparent 0%, rgba(15,23,42,0.4) 35%, rgba(15,23,42,0.85) 60%, #0f172a 80%)",
-          }}
-        />
+          <div className="flex gap-6 md:pb-2">
+            <a
+              href="#"
+              className="text-white/30 hover:text-white/60 transition-colors font-['Geist_Mono',monospace] text-xs"
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="#"
+              className="text-white/30 hover:text-white/60 transition-colors font-['Geist_Mono',monospace] text-xs"
+            >
+              Terms
+            </a>
+          </div>
+        </div>
+
+        <div className="border-t border-white/5 pt-8">
+          <p className="text-white/20 font-['Geist_Mono',monospace] text-xs">
+            © 2026 Via. All rights reserved.
+          </p>
+        </div>
       </div>
     </footer>
   );

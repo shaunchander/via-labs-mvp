@@ -21,6 +21,18 @@ function getAuth() {
   });
 }
 
+export async function submitWaitlistPhone(phone: string): Promise<void> {
+  const auth = getAuth();
+  const sheets = google.sheets({ version: "v4", auth });
+
+  await sheets.spreadsheets.values.append({
+    spreadsheetId: SPREADSHEET_ID,
+    range: "Waitlist!A:B",
+    valueInputOption: "USER_ENTERED",
+    requestBody: { values: [[new Date().toISOString(), phone]] },
+  });
+}
+
 export async function submitSignup(
   answers: QuestionnaireAnswers
 ): Promise<void> {
