@@ -224,12 +224,12 @@ export default function Hero() {
         {/* Subhead */}
 
         <motion.p
-          className="mt-5 max-w-[400px] text-balance font-['Geist_Mono',monospace] text-lg leading-relaxed text-white/48 md:text-lg"
+          className="mt-5 max-w-[400px] text-balance font-['Geist_Mono',monospace] leading-relaxed text-white/48"
           initial={{ opacity: 0, y: 16 }}
           animate={stage >= 3 ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
         >
-          Track your skin health and age backwards.
+          The app that tracks your skin health — start aging backwards.
         </motion.p>
 
         {/* CTA */}
